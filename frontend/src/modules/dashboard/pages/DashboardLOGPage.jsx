@@ -1,8 +1,8 @@
 // §18 — Dashboard Responsable Logistique
 // Widgets : Parc engins, Disponibilité, Maintenance, Pannes, Livraisons, Carburant
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Truck, Wrench, AlertCircle, CheckCircle, Fuel, Package, ArrowRight,
 } from 'lucide-react';
@@ -12,6 +12,7 @@ import Card, { CardHeader } from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
 import Button from '../../../components/ui/Button';
 import { formatDate } from '../../../utils/formatters';
+import { fetchEngins } from '../../engins/store/enginsSlice';
 
 const MAINTENANCES = [
   { engin: 'Grue Liebherr LTM 1060', type: 'Vidange moteur',      date: '2025-05-14', chantier: 'Immeuble Akwa',  status: 'planifie'  },
@@ -27,7 +28,9 @@ const CARBURANT = [
 
 export default function DashboardLOGPage() {
   const { list: engins } = useSelector((s) => s.engins);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  useEffect(() => { dispatch(fetchEngins()); }, [dispatch]);
 
   const operationnels = engins.filter((e) => e.status === 'operationnel').length;
   const enMaintenance = engins.filter((e) => e.status === 'maintenance').length;

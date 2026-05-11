@@ -1,28 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { Plus, ArrowUp, ArrowDown } from 'lucide-react';
-import toast from 'react-hot-toast';
 import DashboardLayout from '../../../layouts/DashboardLayout';
-import Card, { CardHeader } from '../../../components/ui/Card';
+import Card from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
 import Badge from '../../../components/ui/Badge';
 import Modal from '../../../components/ui/Modal';
 import Input, { Select } from '../../../components/ui/Input';
 import { formatDate } from '../../../utils/formatters';
-import { addMouvement } from '../store/stockSlice';
+import { fetchArticles, fetchMouvements, createMouvementAsync } from '../store/stockSlice';
+import { fetchChantiers } from '../../chantiers/store/chantiersSlice';
 
 export default function MouvementsPage() {
   const { mouvements, articles } = useSelector((s) => s.stock);
+  const chantiers = useSelector((s) => s.chantiers.list);
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
+  useEffect(() => {
+    dispatch(fetchMouvements());
+    dispatch(fetchArticles());
+    dispatch(fetchChantiers());
+  }, [dispatch]);
+
   const onSubmit = (data) => {
-    dispatch(addMouvement({ ...data, date: new Date().toISOString().split('T')[0], operateur: 'Moi' }));
-    toast.success('Mouvement enregistré');
-    reset();
-    setModalOpen(false);
+    const article = articles.find((a) => a.id === parseInt(data.article_id, 10));
+    const chantier = chantiers.find((c) => c.id === parseInt(data.chantier_id, 10));
+    dispatch(createMouvementAsync({
+      article_id: parseInt(data.article_id, 10),
+      type: data.type,
+      quantite: parseFloat(data.quantite),
+      chantier_destination_id: data.type === 'sortie' && chantier ? chantier.id : null,
+      motif: data.motif || null,
+    })).then((action) => {
+      if (!action.error) {
+        dispatch(fetchArticles());
+        reset();
+        setModalOpen(false);
+      }
+    });
   };
 
   return (
@@ -68,12 +86,16 @@ export default function MouvementsPage() {
               <option value="entree">Entrée</option>
               <option value="sortie">Sortie</option>
             </Select>
-            <Select label="Article *" error={errors.article?.message} {...register('article', { required: 'Requis' })}>
+            <Select label="Article *" error={errors.article_id?.message} {...register('article_id', { required: 'Requis' })}>
               <option value="">-- Sélectionner --</option>
-              {articles.map((a) => <option key={a.id} value={a.designation}>{a.designation}</option>)}
+              {articles.map((a) => <option key={a.id} value={a.id}>{a.designation} (stock: {a.stock})</option>)}
             </Select>
-            <Input label="Quantité *" type="number" error={errors.qte?.message} {...register('qte', { required: 'Requis', min: 1 })} />
-            <Input label="Chantier *" placeholder="Chantier concerné" error={errors.chantier?.message} {...register('chantier', { required: 'Requis' })} />
+            <Input label="Quantité *" type="number" error={errors.quantite?.message} {...register('quantite', { required: 'Requis', min: 1 })} />
+            <Select label="Chantier *" error={errors.chantier_id?.message} {...register('chantier_id', { required: 'Requis' })}>
+              <option value="">-- Sélectionner --</option>
+              {chantiers.map((c) => <option key={c.id} value={c.id}>{c.nom}</option>)}
+            </Select>
+            <Input label="Motif" placeholder="Raison du mouvement" {...register('motif')} />
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Button type="button" variant="secondary" className="flex-1" onClick={() => setModalOpen(false)}>Annuler</Button>
               <Button type="submit" className="flex-1">Enregistrer</Button>

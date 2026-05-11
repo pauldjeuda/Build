@@ -1,6 +1,6 @@
 // §22 — Workflow Rapport Journalier
 // §42 : Créer rapport = CDC seulement / Valider = CDT seulement
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search, FileText, Cloud, Users, AlertTriangle, Check, X, MessageSquare } from 'lucide-react';
@@ -12,7 +12,7 @@ import Badge from '../../../components/ui/Badge';
 import EmptyState from '../../../components/ui/EmptyState';
 import Pagination from '../../../components/ui/Pagination';
 import { formatDate, statusLabel, statusVariant } from '../../../utils/formatters';
-import { updateRapport } from '../store/rapportsSlice';
+import { fetchRapports, validateRapport, rejectRapport } from '../store/rapportsSlice';
 import { useAuth } from '../../../hooks/useAuth';
 
 const FILTERS = ['all', 'brouillon', 'soumis', 'valide', 'rejete'];
@@ -26,6 +26,8 @@ export default function RapportsListPage() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
   const [page, setPage]     = useState(1);
+
+  useEffect(() => { dispatch(fetchRapports()); }, [dispatch]);
 
   // CDC ne voit que ses propres rapports
   const visibleList = can('validate_rapport')
@@ -41,15 +43,9 @@ export default function RapportsListPage() {
   });
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  // §22 — CDT valide ou rejette
-  const handleValidate = (r) => {
-    dispatch(updateRapport({ ...r, status: 'valide' }));
-    toast.success(`Rapport validé — ${r.chantier}`);
-  };
-  const handleReject = (r) => {
-    dispatch(updateRapport({ ...r, status: 'rejete' }));
-    toast.error(`Rapport rejeté — ${r.chantier}`);
-  };
+  // §22 — CDT valide ou rejette via API
+  const handleValidate = (r) => dispatch(validateRapport(r.id));
+  const handleReject   = (r) => dispatch(rejectRapport({ id: r.id, motif: '' }));
 
   const soumisCount = list.filter((r) => r.status === 'soumis').length;
 

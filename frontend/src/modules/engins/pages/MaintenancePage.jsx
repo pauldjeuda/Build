@@ -1,14 +1,17 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Wrench } from 'lucide-react';
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import Card, { CardHeader } from '../../../components/ui/Card';
 import EmptyState from '../../../components/ui/EmptyState';
 import Button from '../../../components/ui/Button';
 import { formatDate } from '../../../utils/formatters';
+import { fetchEngins } from '../store/enginsSlice';
 
 export default function MaintenancePage() {
   const { maintenances, list } = useSelector((s) => s.engins);
+  const dispatch = useDispatch();
+  useEffect(() => { dispatch(fetchEngins()); }, [dispatch]);
   const upcoming = list.filter((e) => e.prochaineMaintenance).sort((a, b) => new Date(a.prochaineMaintenance) - new Date(b.prochaineMaintenance));
 
   return (

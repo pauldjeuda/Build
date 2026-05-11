@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import { DollarSign, TrendingDown, TrendingUp, AlertCircle, ArrowRight } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import KpiCard from '../../../components/cards/KpiCard';
@@ -11,6 +11,7 @@ import Card, { CardHeader } from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
 import Button from '../../../components/ui/Button';
 import { formatCurrency, formatDate, statusLabel, statusVariant } from '../../../utils/formatters';
+import { fetchDashboard, fetchDepenses } from '../store/financeSlice';
 
 const cashflow = [
   { mois: 'Jan', in: 95,  out: 68 },
@@ -38,7 +39,13 @@ const ChartTooltip = ({ active, payload, label }) => {
 
 export default function FinanceDashboardPage() {
   const { depenses, budgets } = useSelector((s) => s.finance);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(fetchDashboard());
+    dispatch(fetchDepenses());
+  }, [dispatch]);
   const totalBudget   = budgets.reduce((s, b) => s + b.budgetTotal, 0);
   const totalDepenses = budgets.reduce((s, b) => s + b.depenses, 0);
 

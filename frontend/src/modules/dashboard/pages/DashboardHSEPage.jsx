@@ -1,7 +1,7 @@
 // §19 — Dashboard HSE
 // Widgets : Incidents ouverts, Actions correctives, Inspections, Statistiques sécurité, Alertes critiques
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
@@ -13,6 +13,7 @@ import Card, { CardHeader } from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
 import Button from '../../../components/ui/Button';
 import { formatDate } from '../../../utils/formatters';
+import { fetchIncidents } from '../../hse/store/hseSlice';
 
 const GRAVITE_COLORS = {
   faible: { label: 'Faible', variant: 'info'    },
@@ -35,7 +36,9 @@ const ACTIONS = [
 
 export default function DashboardHSEPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { incidents } = useSelector((s) => s.hse);
+  useEffect(() => { dispatch(fetchIncidents()); }, [dispatch]);
 
   const ouverts  = incidents.filter((i) => i.status === 'en_cours').length;
   const resolus  = incidents.filter((i) => i.status === 'resolu').length;

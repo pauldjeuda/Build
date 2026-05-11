@@ -1,6 +1,6 @@
 // §32 — Module Engins
 // §42 : Gérer engins = LOG (full) / DG = lecture / CDT = demande / CDC = carnet de bord / DAF HSE GST = non
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Truck, AlertCircle, Wrench, CheckCircle, BookOpen, Send } from 'lucide-react';
@@ -13,6 +13,7 @@ import Modal from '../../../components/ui/Modal';
 import Input, { Select, Textarea } from '../../../components/ui/Input';
 import { formatDate } from '../../../utils/formatters';
 import { useAuth } from '../../../hooks/useAuth';
+import { fetchEngins } from '../store/enginsSlice';
 
 const statusConfig = {
   operationnel: { label: 'Opérationnel', variant: 'success', icon: CheckCircle },
@@ -22,8 +23,11 @@ const statusConfig = {
 
 export default function EnginsListPage() {
   const { list } = useSelector((s) => s.engins);
+  const dispatch  = useDispatch();
   const navigate  = useNavigate();
   const { can }   = useAuth();
+
+  useEffect(() => { dispatch(fetchEngins()); }, [dispatch]);
   const [carnetOpen, setCarnetOpen]     = useState(false);
   const [selectedEngin, setSelectedEngin] = useState(null);
   const [demandeOpen, setDemandeOpen]   = useState(false);

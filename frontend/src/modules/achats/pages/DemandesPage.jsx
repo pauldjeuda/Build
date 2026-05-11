@@ -1,6 +1,6 @@
 // §23 — Workflow Achat multi-étapes
 // CDC crée → GST vérifie dispo → CDT valide besoin → DAF valide budget → GST réceptionne → Finance comptabilise
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { Plus, Check, X, PackageCheck } from 'lucide-react';
@@ -13,7 +13,6 @@ import Modal from '../../../components/ui/Modal';
 import Input, { Select, Textarea } from '../../../components/ui/Input';
 import EmptyState from '../../../components/ui/EmptyState';
 import { formatCurrency, formatDate } from '../../../utils/formatters';
-import { useEffect } from 'react';
 import {
   fetchDemandes, submitDemande,
   doValidateCdt, doValidateDaf, doReceive, doReject,

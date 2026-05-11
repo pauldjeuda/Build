@@ -1,6 +1,6 @@
 // §26 — Module Chantiers
 // §42 : Voir tous : DG✓ DAF✓ HSE✓ / voir partiel : CDT CDC GST LOG / Créer : DG CDT seulement
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search, Eye, HardHat } from 'lucide-react';
@@ -10,7 +10,7 @@ import Button from '../../../components/ui/Button';
 import Badge from '../../../components/ui/Badge';
 import EmptyState from '../../../components/ui/EmptyState';
 import { formatCurrency, statusLabel, statusVariant } from '../../../utils/formatters';
-import { setSelected } from '../store/chantiersSlice';
+import { setSelected, fetchChantiers } from '../store/chantiersSlice';
 import { useAuth } from '../../../hooks/useAuth';
 
 const FILTERS = ['all', 'actif', 'en_retard', 'suspendu', 'termine'];
@@ -22,6 +22,8 @@ export default function ChantiersListPage() {
   const { can, user }   = useAuth();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
+
+  useEffect(() => { dispatch(fetchChantiers()); }, [dispatch]);
 
   // §42 : CDT, CDC, GST, LOG voient seulement leurs chantiers (partiel)
   // DG, DAF, HSE voient tout

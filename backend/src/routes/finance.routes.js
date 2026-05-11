@@ -6,15 +6,16 @@ const {
 } = require('../controllers/finance.controller');
 const { authenticate } = require('../middleware/auth');
 const { allow } = require('../middleware/rbac');
+const catchAsync = require('../utils/catchAsync');
 
-router.get('/dashboard',       authenticate, allow('view_finance_full'), dashboard);
+router.get('/dashboard',          authenticate, allow('view_finance_full'), catchAsync(dashboard));
 
-router.get('/depenses',        authenticate, allow('view_finance_full', 'view_finance_partial'), listDepenses);
-router.post('/depenses',       authenticate, allow('manage_finance'), createDepense);
+router.get('/depenses',           authenticate, allow('view_finance_full', 'view_finance_partial'), catchAsync(listDepenses));
+router.post('/depenses',          authenticate, allow('manage_finance'),    catchAsync(createDepense));
 
-router.get('/factures',        authenticate, allow('view_finance_full', 'view_finance_partial'), listFactures);
-router.get('/factures/:id',    authenticate, allow('view_finance_full', 'view_finance_partial'), showFacture);
-router.post('/factures',       authenticate, allow('manage_finance'), createFacture);
-router.patch('/factures/:id/payer', authenticate, allow('manage_finance'), payerFacture);
+router.get('/factures',           authenticate, allow('view_finance_full', 'view_finance_partial'), catchAsync(listFactures));
+router.get('/factures/:id',       authenticate, allow('view_finance_full', 'view_finance_partial'), catchAsync(showFacture));
+router.post('/factures',          authenticate, allow('manage_finance'),    catchAsync(createFacture));
+router.patch('/factures/:id/payer', authenticate, allow('manage_finance'), catchAsync(payerFacture));
 
 module.exports = router;

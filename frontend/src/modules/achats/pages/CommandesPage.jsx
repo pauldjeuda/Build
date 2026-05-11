@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search, ShoppingCart, Truck, CheckCircle, XCircle, Clock } from 'lucide-react';
@@ -9,7 +9,7 @@ import Badge from '../../../components/ui/Badge';
 import Modal from '../../../components/ui/Modal';
 import Input, { Select } from '../../../components/ui/Input';
 import { formatCurrency, formatDate } from '../../../utils/formatters';
-import { addCommande, updateCommande } from '../store/achatsSlice';
+import { addCommande, updateCommande, fetchCommandes, fetchFournisseurs } from '../store/achatsSlice';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -30,6 +30,11 @@ export default function CommandesPage() {
   const [modal, setModal]   = useState(false);
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+  useEffect(() => {
+    dispatch(fetchCommandes());
+    dispatch(fetchFournisseurs());
+  }, [dispatch]);
 
   const filtered = commandes.filter((c) => {
     const q = search.toLowerCase();

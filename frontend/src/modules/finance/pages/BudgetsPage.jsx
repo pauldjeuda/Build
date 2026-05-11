@@ -1,11 +1,14 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import Card, { CardHeader } from '../../../components/ui/Card';
 import { formatCurrency } from '../../../utils/formatters';
+import { fetchDashboard } from '../store/financeSlice';
 
 export default function BudgetsPage() {
   const { budgets } = useSelector((s) => s.finance);
+  const dispatch = useDispatch();
+  useEffect(() => { dispatch(fetchDashboard()); }, [dispatch]);
   const totalBudget = budgets.reduce((s, b) => s + b.budgetTotal, 0);
   const totalDepenses = budgets.reduce((s, b) => s + b.depenses, 0);
 

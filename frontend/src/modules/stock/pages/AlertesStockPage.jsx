@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, Package } from 'lucide-react';
 import DashboardLayout from '../../../layouts/DashboardLayout';
@@ -7,10 +7,14 @@ import Card, { CardHeader } from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
 import EmptyState from '../../../components/ui/EmptyState';
 import { formatCurrency } from '../../../utils/formatters';
+import { fetchArticles } from '../store/stockSlice';
 
 export default function AlertesStockPage() {
   const { articles } = useSelector((s) => s.stock);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => { dispatch(fetchArticles()); }, [dispatch]);
   const alertes = articles.filter((a) => a.stock <= a.seuil);
 
   return (

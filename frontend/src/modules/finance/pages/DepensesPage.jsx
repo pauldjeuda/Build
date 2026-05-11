@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { Plus } from 'lucide-react';
@@ -10,7 +10,8 @@ import Badge from '../../../components/ui/Badge';
 import Modal from '../../../components/ui/Modal';
 import Input, { Select } from '../../../components/ui/Input';
 import { formatCurrency, formatDate, statusLabel, statusVariant } from '../../../utils/formatters';
-import { addDepense } from '../store/financeSlice';
+import { fetchDepenses, createDepenseAsync } from '../store/financeSlice';
+import { fetchChantiers } from '../../chantiers/store/chantiersSlice';
 
 const CATEGORIES = ['Matériaux', "Main d'œuvre", 'Carburant', 'Location engins', 'Transport', 'Divers'];
 
@@ -21,11 +22,21 @@ export default function DepensesPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
+  useEffect(() => {
+    dispatch(fetchDepenses());
+    dispatch(fetchChantiers());
+  }, [dispatch]);
+
   const onSubmit = (data) => {
-    dispatch(addDepense({ ...data, montant: parseFloat(data.montant), date: new Date().toISOString().split('T')[0], status: 'en_attente' }));
-    toast.success('Dépense enregistrée');
-    reset();
-    setModalOpen(false);
+    const chantierId = chantiers.find((c) => c.nom === data.chantier)?.id;
+    dispatch(createDepenseAsync({
+      description: data.libelle,
+      categorie: data.categorie,
+      chantier_id: chantierId,
+      montant: parseFloat(data.montant),
+    })).then((action) => {
+      if (!action.error) { reset(); setModalOpen(false); }
+    });
   };
 
   const total = depenses.reduce((s, d) => s + d.montant, 0);

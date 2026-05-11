@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Plus, Search, FileText, ArrowDownLeft, ArrowUpRight, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import DashboardLayout from '../../../layouts/DashboardLayout';
@@ -8,9 +8,8 @@ import Badge from '../../../components/ui/Badge';
 import Modal from '../../../components/ui/Modal';
 import Input, { Select } from '../../../components/ui/Input';
 import { formatCurrency, formatDate } from '../../../utils/formatters';
-import { addFacture, updateFacture } from '../store/financeSlice';
+import { fetchFactures, createFactureAsync, payerFactureAsync } from '../store/financeSlice';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
 const STATUS_META = {
   ouvert:    { label: 'Ouvert',     variant: 'info',    icon: Clock },
@@ -32,6 +31,8 @@ export default function FacturesPage() {
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
+  useEffect(() => { dispatch(fetchFactures()); }, [dispatch]);
+
   const filtered = factures.filter((f) => {
     const q = search.toLowerCase();
     const matchQ = f.reference.toLowerCase().includes(q) ||
@@ -48,15 +49,21 @@ export default function FacturesPage() {
   };
 
   const onSubmit = (data) => {
-    dispatch(addFacture({ ...data, montant: Number(data.montant) }));
-    toast.success('Facture créée');
-    reset();
-    setModal(false);
+    dispatch(createFactureAsync({
+      type: data.type,
+      tiers: data.tiers,
+      libelle: data.libelle,
+      montant_ttc: Number(data.montant),
+      montant_ht: Number(data.montant),
+      date_emission: data.dateEmission,
+      date_echeance: data.dateEcheance,
+    })).then((action) => {
+      if (!action.error) { reset(); setModal(false); }
+    });
   };
 
   const handlePay = (f) => {
-    dispatch(updateFacture({ id: f.id, status: 'paye' }));
-    toast.success(`Facture ${f.reference} marquée payée`);
+    dispatch(payerFactureAsync({ id: f.id, montant: f.montant }));
   };
 
   return (

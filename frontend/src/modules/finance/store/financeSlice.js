@@ -63,6 +63,24 @@ export const createDepenseAsync = createAsyncThunk('finance/createDepense', asyn
   }
 });
 
+export const createFactureAsync = createAsyncThunk('finance/createFacture', async (data, { rejectWithValue }) => {
+  try {
+    const res = await financeService.createFacture(data);
+    return normFacture(res.data ?? res);
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
+export const payerFactureAsync = createAsyncThunk('finance/payerFacture', async ({ id, montant }, { rejectWithValue }) => {
+  try {
+    const res = await financeService.payerFacture(id, montant);
+    return normFacture(res.data ?? res);
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
 const financeSlice = createSlice({
   name: 'finance',
   initialState: {
@@ -105,7 +123,20 @@ const financeSlice = createSlice({
         state.depenses.unshift(payload);
         toast.success('Dépense enregistrée');
       })
-      .addCase(createDepenseAsync.rejected, (_, { payload }) => toast.error(payload?.message ?? 'Erreur'));
+      .addCase(createDepenseAsync.rejected, (_, { payload }) => toast.error(payload?.message ?? 'Erreur'))
+
+      .addCase(createFactureAsync.fulfilled, (state, { payload }) => {
+        state.factures.unshift(payload);
+        toast.success('Facture créée');
+      })
+      .addCase(createFactureAsync.rejected, (_, { payload }) => toast.error(payload?.message ?? 'Erreur'))
+
+      .addCase(payerFactureAsync.fulfilled, (state, { payload }) => {
+        const idx = state.factures.findIndex((f) => f.id === payload.id);
+        if (idx !== -1) state.factures[idx] = payload;
+        toast.success('Facture marquée payée');
+      })
+      .addCase(payerFactureAsync.rejected, (_, { payload }) => toast.error(payload?.message ?? 'Erreur'));
   },
 });
 

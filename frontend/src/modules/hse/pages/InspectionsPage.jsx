@@ -1,14 +1,17 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { ClipboardCheck } from 'lucide-react';
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import Card, { CardHeader } from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
 import Button from '../../../components/ui/Button';
 import { formatDate } from '../../../utils/formatters';
+import { fetchInspections } from '../store/hseSlice';
 
 export default function InspectionsPage() {
   const { inspections } = useSelector((s) => s.hse);
+  const dispatch = useDispatch();
+  useEffect(() => { dispatch(fetchInspections()); }, [dispatch]);
 
   return (
     <DashboardLayout>

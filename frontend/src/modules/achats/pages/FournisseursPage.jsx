@@ -1,12 +1,15 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Phone, MapPin, Package } from 'lucide-react';
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import Card from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
+import { fetchFournisseurs } from '../store/achatsSlice';
 
 export default function FournisseursPage() {
   const { fournisseurs } = useSelector((s) => s.achats);
+  const dispatch = useDispatch();
+  useEffect(() => { dispatch(fetchFournisseurs()); }, [dispatch]);
 
   return (
     <DashboardLayout>

@@ -1,8 +1,8 @@
 // §17 — Dashboard Gestionnaire de Stock
 // Widgets : Stock global, Ruptures, Entrées, Sorties, Transferts, Inventaires, Demandes en attente
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from 'recharts';
@@ -13,6 +13,7 @@ import Card, { CardHeader } from '../../../components/ui/Card';
 import Badge from '../../../components/ui/Badge';
 import Button from '../../../components/ui/Button';
 import { formatCurrency } from '../../../utils/formatters';
+import { fetchArticles } from '../../stock/store/stockSlice';
 
 const MOUVEMENTS_DATA = [
   { jour: 'Lun', entrees: 12, sorties: 8  },
@@ -30,7 +31,9 @@ const DEMANDES = [
 
 export default function DashboardGSTPage() {
   const { articles } = useSelector((s) => s.stock);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  useEffect(() => { dispatch(fetchArticles()); }, [dispatch]);
 
   const alertCount   = articles.filter((a) => a.stock <= a.seuil).length;
   const totalValeur  = articles.reduce((s, a) => s + a.valeur, 0);

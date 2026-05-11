@@ -1,6 +1,6 @@
 // §29 — Module Stock
 // §42 : Gérer stock = GST (full) / DG DAF CDT LOG = lecture seule / CDC = demande / HSE = non
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Search, AlertTriangle, ArrowUpDown, Plus, PackagePlus } from 'lucide-react';
@@ -14,14 +14,22 @@ import Input, { Select } from '../../../components/ui/Input';
 import Pagination from '../../../components/ui/Pagination';
 import { formatCurrency } from '../../../utils/formatters';
 import { useAuth } from '../../../hooks/useAuth';
+import { fetchArticles } from '../store/stockSlice';
+import { fetchChantiers } from '../../chantiers/store/chantiersSlice';
 
 const PAGE_SIZE = 8;
 
 export default function StockListPage() {
   const { articles } = useSelector((s) => s.stock);
   const chantiers    = useSelector((s) => s.chantiers.list);
+  const dispatch     = useDispatch();
   const navigate     = useNavigate();
   const { can }      = useAuth();
+
+  useEffect(() => {
+    dispatch(fetchArticles());
+    dispatch(fetchChantiers());
+  }, [dispatch]);
   const [search, setSearch]       = useState('');
   const [page, setPage]           = useState(1);
   const [demandeOpen, setDemandeOpen] = useState(false);

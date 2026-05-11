@@ -116,7 +116,6 @@ const achatsSlice = createSlice({
     error: null,
   },
   reducers: {
-    // Kept for optimistic fallback when API unavailable
     addDemande(state, action) {
       const num = String(state.demandes.length + 1).padStart(3, '0');
       state.demandes.unshift({ ...action.payload, id: Date.now(), reference: `DA-${new Date().getFullYear()}-${num}` });
@@ -124,6 +123,14 @@ const achatsSlice = createSlice({
     updateDemande(state, action) {
       const idx = state.demandes.findIndex((d) => d.id === action.payload.id);
       if (idx !== -1) state.demandes[idx] = { ...state.demandes[idx], ...action.payload };
+    },
+    addCommande(state, action) {
+      const num = String(state.commandes.length + 1).padStart(3, '0');
+      state.commandes.unshift({ ...action.payload, id: Date.now(), reference: `BC-${new Date().getFullYear()}-${num}` });
+    },
+    updateCommande(state, action) {
+      const idx = state.commandes.findIndex((c) => c.id === action.payload.id);
+      if (idx !== -1) state.commandes[idx] = { ...state.commandes[idx], ...action.payload };
     },
   },
   extraReducers: (builder) => {
@@ -171,5 +178,5 @@ const achatsSlice = createSlice({
   },
 });
 
-export const { addDemande, updateDemande } = achatsSlice.actions;
+export const { addDemande, updateDemande, addCommande, updateCommande } = achatsSlice.actions;
 export default achatsSlice.reducer;

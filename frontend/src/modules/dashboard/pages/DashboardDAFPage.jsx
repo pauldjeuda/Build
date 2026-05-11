@@ -4,11 +4,13 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
 } from 'recharts';
 import { DollarSign, TrendingDown, TrendingUp, AlertCircle } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import KpiCard from '../../../components/cards/KpiCard';
 import Card, { CardHeader } from '../../../components/ui/Card';
 import { formatCurrency } from '../../../utils/formatters';
+import { fetchDashboard } from '../../finance/store/financeSlice';
 
 const PIE_DATA = [
   { name: 'Matériaux',    value: 45, color: '#1B4FDB' },
@@ -55,6 +57,8 @@ const ChartTooltip = ({ active, payload }) => {
 
 export default function DashboardDAFPage() {
   const { budgets } = useSelector((s) => s.finance);
+  const dispatch = useDispatch();
+  useEffect(() => { dispatch(fetchDashboard()); }, [dispatch]);
   const totalBudget   = budgets.reduce((s, b) => s + b.budgetTotal, 0);
   const totalDepenses = budgets.reduce((s, b) => s + b.depenses, 0);
 
