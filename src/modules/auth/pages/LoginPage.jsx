@@ -3,30 +3,37 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Lock, Mail, Eye, EyeOff } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import AuthLayout from '../../../layouts/AuthLayout';
 import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import { loginSuccess } from '../store/authSlice';
 
-const DEMO_USERS = {
-  'dg@buildpro.cm':   { name: 'Directeur Général',    role: 'dg',           token: 'demo-dg'   },
-  'daf@buildpro.cm':  { name: 'Dir. Administrative',  role: 'daf',          token: 'demo-daf'  },
-  'cdt@buildpro.cm':  { name: 'Chef de Travaux',       role: 'cdt',          token: 'demo-cdt'  },
-  'chef@buildpro.cm': { name: 'Chef Chantier',         role: 'chef_chantier',token: 'demo-chef' },
+const DEMO_USERS = [
+  { email: 'dg@buildpro.cm',   name: 'Directeur Général',   role: 'dg',           color: 'bg-primary-500' },
+  { email: 'daf@buildpro.cm',  name: 'Dir. Administrative', role: 'daf',          color: 'bg-gold-500'    },
+  { email: 'cdt@buildpro.cm',  name: 'Chef de Travaux',     role: 'cdt',          color: 'bg-emerald-500' },
+  { email: 'chef@buildpro.cm', name: 'Chef Chantier',       role: 'chef_chantier',color: 'bg-orange-500'  },
+];
+
+const CREDENTIALS = {
+  'dg@buildpro.cm':   { name: 'Directeur Général',   role: 'dg',           token: 'demo-dg'   },
+  'daf@buildpro.cm':  { name: 'Dir. Administrative', role: 'daf',          token: 'demo-daf'  },
+  'cdt@buildpro.cm':  { name: 'Chef de Travaux',     role: 'cdt',          token: 'demo-cdt'  },
+  'chef@buildpro.cm': { name: 'Chef Chantier',       role: 'chef_chantier',token: 'demo-chef' },
 };
 
 export default function LoginPage() {
-  const dispatch   = useDispatch();
-  const navigate   = useNavigate();
-  const [loading, setLoading]   = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [loading,  setLoading]  = useState(false);
   const [showPwd,  setShowPwd]  = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
   const onSubmit = async ({ email, password }) => {
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 700));
-    const user = DEMO_USERS[email.toLowerCase()];
+    await new Promise((r) => setTimeout(r, 650));
+    const user = CREDENTIALS[email.toLowerCase()];
     if (user && password === 'buildpro2025') {
       dispatch(loginSuccess({ email, ...user }));
       toast.success(`Bienvenue, ${user.name} !`);
@@ -37,77 +44,98 @@ export default function LoginPage() {
     setLoading(false);
   };
 
+  const fillDemo = (u) => {
+    setValue('email', u.email);
+    setValue('password', 'buildpro2025');
+  };
+
   return (
     <AuthLayout>
+      {/* Header */}
       <div className="mb-7">
-        <h2 className="text-2xl font-extrabold text-slate-900 mb-1">Connexion</h2>
-        <p className="text-sm text-slate-500">Accédez à votre espace de gestion</p>
+        <div className="flex items-center gap-2 mb-3">
+          <div className="h-px w-5 bg-gold-500" />
+          <span className="font-display text-gold-600 text-[10px] font-bold uppercase tracking-widest">Espace sécurisé</span>
+        </div>
+        <h2 className="font-display text-2xl font-black text-obsidian-900 tracking-tight mb-1.5">
+          Connexion
+        </h2>
+        <p className="font-sans text-sm text-obsidian-400">Accédez à votre espace de gestion BTP</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <Input
+          id="email"
           label="Adresse email"
           type="email"
           placeholder="vous@buildpro.cm"
-          icon={<Mail size={15} />}
+          icon={<Mail size={14} className="text-obsidian-300" />}
           error={errors.email?.message}
+          autoComplete="email"
           {...register('email', {
             required: 'Email requis',
             pattern:  { value: /\S+@\S+\.\S+/, message: 'Email invalide' },
           })}
         />
 
-        <div>
-          <Input
-            label="Mot de passe"
-            type={showPwd ? 'text' : 'password'}
-            placeholder="••••••••"
-            icon={<Lock size={15} />}
-            suffix={
-              <button
-                type="button"
-                onClick={() => setShowPwd((v) => !v)}
-                className="text-slate-400 hover:text-slate-600 transition-colors"
-                tabIndex={-1}
-              >
-                {showPwd ? <EyeOff size={14} /> : <Eye size={14} />}
-              </button>
-            }
-            error={errors.password?.message}
-            {...register('password', { required: 'Mot de passe requis' })}
-          />
-        </div>
+        <Input
+          id="password"
+          label="Mot de passe"
+          type={showPwd ? 'text' : 'password'}
+          placeholder="••••••••"
+          icon={<Lock size={14} className="text-obsidian-300" />}
+          autoComplete="current-password"
+          suffix={
+            <button
+              type="button"
+              onClick={() => setShowPwd((v) => !v)}
+              className="text-obsidian-300 hover:text-obsidian-600 transition-colors"
+              tabIndex={-1}
+              aria-label={showPwd ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+            >
+              {showPwd ? <EyeOff size={14} /> : <Eye size={14} />}
+            </button>
+          }
+          error={errors.password?.message}
+          {...register('password', { required: 'Mot de passe requis' })}
+        />
 
-        <Button type="submit" loading={loading} className="w-full !py-3 mt-2 text-sm">
+        <Button
+          type="submit"
+          loading={loading}
+          iconRight={!loading && <ArrowRight size={15} />}
+          className="w-full !py-3 text-sm mt-1"
+        >
           Se connecter
         </Button>
       </form>
 
       {/* Demo accounts */}
-      <div className="mt-6 rounded-2xl border border-slate-100 overflow-hidden">
-        <div className="bg-slate-50 px-4 py-2.5 border-b border-slate-100">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-            Comptes démo — mot de passe : <code className="font-mono text-primary-600">buildpro2025</code>
+      <div className="mt-6 rounded-2xl border border-[#E8E2D9] overflow-hidden">
+        <div className="bg-canvas px-4 py-2.5" style={{ borderBottom: '1px solid #E8E2D9' }}>
+          <p className="font-display text-[10px] font-semibold text-obsidian-400 uppercase tracking-widest">
+            Comptes démo · <code className="font-mono text-gold-600 normal-case">buildpro2025</code>
           </p>
         </div>
-        <div className="divide-y divide-slate-100">
-          {Object.entries(DEMO_USERS).map(([email, u]) => (
+        <div className="divide-y divide-[#F4F1EB]">
+          {DEMO_USERS.map((u) => (
             <button
-              key={email}
+              key={u.email}
               type="button"
-              onClick={() => {
-                document.querySelector('input[type="email"]').value = email;
-                document.querySelector('input[name="email"]').value = email;
-              }}
-              className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-slate-50 transition-colors text-left group"
+              onClick={() => fillDemo(u)}
+              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-canvas transition-colors text-left group"
             >
-              <div>
-                <p className="text-xs font-semibold text-slate-700">{u.name}</p>
-                <p className="text-xs text-slate-400 font-mono">{email}</p>
+              <div className={`w-7 h-7 rounded-lg ${u.color} flex items-center justify-center shrink-0`}>
+                <span className="font-display font-bold text-white text-xs">{u.name[0]}</span>
               </div>
-              <span className="text-xs text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                Utiliser →
-              </span>
+              <div className="flex-1 min-w-0">
+                <p className="font-display text-xs font-semibold text-obsidian-800">{u.name}</p>
+                <p className="font-mono text-[10px] text-obsidian-400 truncate">{u.email}</p>
+              </div>
+              <ArrowRight
+                size={13}
+                className="text-gold-500 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+              />
             </button>
           ))}
         </div>

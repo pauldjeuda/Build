@@ -35,7 +35,7 @@ export default function ChantierCreatePage() {
           <Button variant="ghost" size="sm" icon={<ArrowLeft size={16} />} onClick={() => navigate('/chantiers')}>
             Retour
           </Button>
-          <h2 className="text-xl font-bold text-gray-900">Nouveau Chantier</h2>
+          <h2 className="font-display text-xl font-bold text-obsidian-900">Nouveau Chantier</h2>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -65,7 +65,7 @@ export default function ChantierCreatePage() {
 
           <Card>
             <CardHeader title="Planification" />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Date de début *"
                 type="date"
@@ -100,7 +100,7 @@ export default function ChantierCreatePage() {
             </div>
           </Card>
 
-          <div className="flex gap-3 justify-end">
+          <div className="flex flex-col sm:flex-row gap-3 justify-end">
             <Button type="button" variant="secondary" onClick={() => navigate('/chantiers')}>Annuler</Button>
             <Button type="submit" loading={isSubmitting}>Créer le chantier</Button>
           </div>

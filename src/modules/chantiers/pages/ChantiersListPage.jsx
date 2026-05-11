@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Search, Eye, HardHat, SlidersHorizontal } from 'lucide-react';
+import { Plus, Search, Eye, HardHat } from 'lucide-react';
 import DashboardLayout from '../../../layouts/DashboardLayout';
 import Card from '../../../components/ui/Card';
 import Button from '../../../components/ui/Button';
@@ -39,14 +39,14 @@ export default function ChantiersListPage() {
         {/* Stats bar */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'Total',       value: stats.total,     color: 'text-slate-800' },
-            { label: 'En cours',    value: stats.actif,     color: 'text-emerald-600' },
-            { label: 'En retard',   value: stats.en_retard, color: 'text-red-500' },
+            { label: 'Total',     value: stats.total,     color: 'text-obsidian-900' },
+            { label: 'En cours',  value: stats.actif,     color: 'text-emerald-600'  },
+            { label: 'En retard', value: stats.en_retard, color: 'text-red-500'       },
           ].map((s) => (
-            <div key={s.label} className="bg-white rounded-2xl border border-slate-100 px-5 py-3 flex items-center gap-4 shadow-[0_1px_3px_0_rgba(0,0,0,0.06)]">
+            <div key={s.label} className="bg-white rounded-2xl border border-[#E8E2D9] px-5 py-4 shadow-card flex items-center gap-4">
               <div>
-                <p className={`text-2xl font-extrabold ${s.color}`}>{s.value}</p>
-                <p className="text-xs text-slate-400">{s.label}</p>
+                <p className={`font-display text-2xl font-extrabold ${s.color}`}>{s.value}</p>
+                <p className="font-sans text-xs text-obsidian-400 mt-0.5">{s.label}</p>
               </div>
             </div>
           ))}
@@ -54,13 +54,13 @@ export default function ChantiersListPage() {
 
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row gap-3">
-          <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3 py-2.5 flex-1 max-w-xs shadow-sm">
-            <Search size={15} className="text-slate-400 shrink-0" />
+          <div className="flex items-center gap-2 bg-white border border-[#E8E2D9] rounded-xl px-3 py-2.5 flex-1 max-w-xs shadow-sm">
+            <Search size={15} className="text-obsidian-300 shrink-0" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Rechercher un chantier…"
-              className="bg-transparent text-sm text-slate-700 placeholder-slate-400 focus:outline-none w-full"
+              className="bg-transparent font-sans text-sm text-obsidian-700 placeholder-obsidian-300 focus:outline-none w-full"
             />
           </div>
 
@@ -70,10 +70,10 @@ export default function ChantiersListPage() {
                 key={f}
                 onClick={() => setFilter(f)}
                 className={[
-                  'px-3 py-2 rounded-xl text-xs font-medium transition-all',
+                  'px-3 py-2 rounded-xl text-xs font-display font-medium transition-all',
                   filter === f
-                    ? 'bg-primary-600 text-white shadow-sm'
-                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50',
+                    ? 'bg-obsidian-900 text-white shadow-sm'
+                    : 'bg-white border border-[#E8E2D9] text-obsidian-600 hover:bg-canvas',
                 ].join(' ')}
               >
                 {f === 'all' ? 'Tous' : statusLabel(f)}
@@ -96,37 +96,37 @@ export default function ChantiersListPage() {
             />
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filtered.map((c) => {
               const taux = Math.round((c.depenses / c.budget) * 100);
               return (
                 <div
                   key={c.id}
                   onClick={() => handleView(c)}
-                  className="bg-white rounded-2xl border border-slate-100 p-5 shadow-[0_1px_3px_0_rgba(0,0,0,0.06)] hover:shadow-[0_4px_20px_0_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer group"
+                  className="bg-white rounded-2xl border border-[#E8E2D9] p-5 shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 cursor-pointer group"
                 >
                   {/* Header */}
                   <div className="flex items-start justify-between mb-1">
                     <div className="flex-1 min-w-0 mr-3">
-                      <h3 className="font-bold text-slate-900 truncate">{c.nom}</h3>
-                      <p className="text-xs text-slate-400 mt-0.5">{c.localisation}</p>
+                      <h3 className="font-display font-bold text-obsidian-900 truncate">{c.nom}</h3>
+                      <p className="font-sans text-xs text-obsidian-400 mt-0.5">{c.localisation}</p>
                     </div>
                     <Badge variant={statusVariant(c.status)} dot>{statusLabel(c.status)}</Badge>
                   </div>
 
-                  <p className="text-xs text-slate-400 mb-4 line-clamp-1">{c.description}</p>
+                  <p className="font-sans text-xs text-obsidian-400 mb-4 line-clamp-1">{c.description}</p>
 
                   {/* Progress */}
                   <div className="mb-4">
-                    <div className="flex justify-between text-xs mb-1.5">
-                      <span className="text-slate-500 font-medium">Avancement</span>
-                      <span className={`font-bold ${c.status === 'en_retard' ? 'text-red-500' : 'text-primary-600'}`}>
+                    <div className="flex justify-between text-xs mb-2">
+                      <span className="font-sans text-obsidian-500 font-medium">Avancement</span>
+                      <span className={`font-display font-bold ${c.status === 'en_retard' ? 'text-red-500' : 'text-primary-600'}`}>
                         {c.avancement}%
                       </span>
                     </div>
-                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                    <div className="progress-track">
                       <div
-                        className={`h-full rounded-full ${c.status === 'en_retard' ? 'bg-red-400' : 'bg-primary-500'}`}
+                        className={`progress-fill ${c.status === 'en_retard' ? 'bg-red-400' : 'bg-primary-600'}`}
                         style={{ width: `${c.avancement}%` }}
                       />
                     </div>
@@ -134,27 +134,27 @@ export default function ChantiersListPage() {
 
                   {/* Budget */}
                   <div className="grid grid-cols-2 gap-2.5 mb-4">
-                    <div className="bg-slate-50 rounded-xl p-3">
-                      <p className="text-xs text-slate-400 mb-0.5">Budget</p>
-                      <p className="text-xs font-bold text-slate-700 truncate">{formatCurrency(c.budget)}</p>
+                    <div className="bg-canvas rounded-xl p-3">
+                      <p className="font-sans text-xs text-obsidian-400 mb-0.5">Budget</p>
+                      <p className="font-display text-xs font-bold text-obsidian-700 truncate">{formatCurrency(c.budget)}</p>
                     </div>
-                    <div className={`rounded-xl p-3 ${taux > 90 ? 'bg-red-50' : 'bg-slate-50'}`}>
-                      <p className="text-xs text-slate-400 mb-0.5">Dépensé ({taux}%)</p>
-                      <p className={`text-xs font-bold truncate ${taux > 90 ? 'text-red-600' : 'text-slate-700'}`}>
+                    <div className={`rounded-xl p-3 ${taux > 90 ? 'bg-red-50' : 'bg-canvas'}`}>
+                      <p className="font-sans text-xs text-obsidian-400 mb-0.5">Dépensé ({taux}%)</p>
+                      <p className={`font-display text-xs font-bold truncate ${taux > 90 ? 'text-red-600' : 'text-obsidian-700'}`}>
                         {formatCurrency(c.depenses)}
                       </p>
                     </div>
                   </div>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                  <div className="flex items-center justify-between pt-3 border-t border-[#E8E2D9]">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-lg bg-primary-100 flex items-center justify-center">
-                        <span className="text-xs font-bold text-primary-700">{c.chef[0]}</span>
+                      <div className="w-6 h-6 rounded-lg bg-gold-100 flex items-center justify-center">
+                        <span className="font-display text-xs font-bold text-gold-700">{c.chef[0]}</span>
                       </div>
-                      <span className="text-xs text-slate-500">{c.chef}</span>
+                      <span className="font-sans text-xs text-obsidian-500">{c.chef}</span>
                     </div>
-                    <span className="text-xs text-primary-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                    <span className="font-display text-xs text-gold-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
                       <Eye size={12} /> Voir détail
                     </span>
                   </div>

@@ -35,24 +35,24 @@ export default function MouvementsPage() {
         </div>
 
         <Card padding={false}>
-          <div className="px-5 py-4 border-b border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-800">Historique des mouvements</h3>
+          <div className="px-5 py-4 border-b border-[#E8E2D9]">
+            <h3 className="font-display text-sm font-semibold text-obsidian-800">Historique des mouvements</h3>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-[#F4F1EB]">
             {mouvements.map((m) => (
-              <div key={m.id} className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50">
-                <div className={`p-2 rounded-xl ${m.type === 'entree' ? 'bg-green-100' : 'bg-red-100'}`}>
-                  {m.type === 'entree' ? <ArrowDown size={16} className="text-green-600" /> : <ArrowUp size={16} className="text-red-600" />}
+              <div key={m.id} className="flex items-center gap-4 px-5 py-4 hover:bg-canvas/60 transition-colors">
+                <div className={`p-2 rounded-xl shrink-0 ${m.type === 'entree' ? 'bg-emerald-100' : 'bg-red-100'}`}>
+                  {m.type === 'entree' ? <ArrowDown size={16} className="text-emerald-600" /> : <ArrowUp size={16} className="text-red-600" />}
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800">{m.article}</p>
-                  <p className="text-xs text-gray-400">{m.chantier} · {m.operateur}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="font-display text-sm font-semibold text-obsidian-800 truncate">{m.article}</p>
+                  <p className="font-sans text-xs text-obsidian-400">{m.chantier} · {m.operateur}</p>
                 </div>
-                <div className="text-right">
-                  <p className={`text-sm font-bold ${m.type === 'entree' ? 'text-green-600' : 'text-red-600'}`}>
+                <div className="text-right shrink-0">
+                  <p className={`font-display text-sm font-bold ${m.type === 'entree' ? 'text-emerald-600' : 'text-red-600'}`}>
                     {m.type === 'entree' ? '+' : '-'}{m.qte}
                   </p>
-                  <p className="text-xs text-gray-400">{formatDate(m.date)}</p>
+                  <p className="font-sans text-xs text-obsidian-400">{formatDate(m.date)}</p>
                 </div>
                 <Badge variant={m.type === 'entree' ? 'success' : 'danger'}>
                   {m.type === 'entree' ? 'Entrée' : 'Sortie'}
@@ -74,7 +74,7 @@ export default function MouvementsPage() {
             </Select>
             <Input label="Quantité *" type="number" error={errors.qte?.message} {...register('qte', { required: 'Requis', min: 1 })} />
             <Input label="Chantier *" placeholder="Chantier concerné" error={errors.chantier?.message} {...register('chantier', { required: 'Requis' })} />
-            <div className="flex gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Button type="button" variant="secondary" className="flex-1" onClick={() => setModalOpen(false)}>Annuler</Button>
               <Button type="submit" className="flex-1">Enregistrer</Button>
             </div>

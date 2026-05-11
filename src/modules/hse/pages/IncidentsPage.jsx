@@ -39,15 +39,15 @@ export default function IncidentsPage() {
   return (
     <DashboardLayout>
       <div className="space-y-5">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-4">
-            <div className="bg-red-50 border border-red-100 rounded-2xl px-4 py-3">
-              <p className="text-xs text-gray-400">Incidents ouverts</p>
-              <p className="text-xl font-bold text-red-600">{open}</p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex gap-3 flex-wrap">
+            <div className="bg-red-50 border border-red-100 rounded-2xl px-4 py-3 shadow-card">
+              <p className="font-sans text-xs text-obsidian-400">Incidents ouverts</p>
+              <p className="font-display text-xl font-bold text-red-600">{open}</p>
             </div>
-            <div className="bg-white border border-gray-100 rounded-2xl px-4 py-3">
-              <p className="text-xs text-gray-400">Total période</p>
-              <p className="text-xl font-bold text-gray-900">{incidents.length}</p>
+            <div className="bg-white border border-[#E8E2D9] rounded-2xl px-4 py-3 shadow-card">
+              <p className="font-sans text-xs text-obsidian-400">Total période</p>
+              <p className="font-display text-xl font-bold text-obsidian-900">{incidents.length}</p>
             </div>
           </div>
           <Button icon={<Plus size={16} />} onClick={() => setModalOpen(true)}>Déclarer incident</Button>
@@ -58,20 +58,20 @@ export default function IncidentsPage() {
             const g = GRAVITES[inc.gravite] || { label: inc.gravite, variant: 'gray' };
             return (
               <Card key={inc.id} className={inc.status === 'en_cours' ? 'border-l-4 border-l-red-500' : ''}>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <div className={`p-2 rounded-xl mt-0.5 ${inc.status === 'en_cours' ? 'bg-red-100' : 'bg-green-100'}`}>
-                      {inc.status === 'en_cours' ? <AlertTriangle size={16} className="text-red-600" /> : <CheckCircle size={16} className="text-green-600" />}
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3 flex-1 min-w-0">
+                    <div className={`p-2 rounded-xl mt-0.5 shrink-0 ${inc.status === 'en_cours' ? 'bg-red-100' : 'bg-emerald-100'}`}>
+                      {inc.status === 'en_cours' ? <AlertTriangle size={16} className="text-red-600" /> : <CheckCircle size={16} className="text-emerald-600" />}
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <p className="font-semibold text-gray-800">{inc.type}</p>
+                        <p className="font-display font-semibold text-obsidian-800">{inc.type}</p>
                         <Badge variant={g.variant}>{g.label}</Badge>
                         <Badge variant={inc.status === 'resolu' ? 'success' : 'warning'}>{inc.status === 'resolu' ? 'Résolu' : 'En cours'}</Badge>
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">{inc.description}</p>
-                      {inc.victime && <p className="text-xs text-gray-400 mt-0.5">Victime : {inc.victime}</p>}
-                      <p className="text-xs text-gray-400 mt-1">{inc.chantier} · {formatDate(inc.date)}</p>
+                      <p className="font-sans text-sm text-obsidian-600 mt-1">{inc.description}</p>
+                      {inc.victime && <p className="font-sans text-xs text-obsidian-400 mt-0.5">Victime : {inc.victime}</p>}
+                      <p className="font-sans text-xs text-obsidian-400 mt-1">{inc.chantier} · {formatDate(inc.date)}</p>
                     </div>
                   </div>
                   {inc.status === 'en_cours' && (
@@ -98,7 +98,7 @@ export default function IncidentsPage() {
             </Select>
             <Textarea label="Description *" placeholder="Décrire l'incident en détail..." rows={3} {...register('description', { required: true })} />
             <Input label="Victime (si applicable)" placeholder="Nom et prénom" {...register('victime')} />
-            <div className="flex gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Button type="button" variant="secondary" className="flex-1" onClick={() => setModalOpen(false)}>Annuler</Button>
               <Button type="submit" variant="danger" className="flex-1">Déclarer</Button>
             </div>

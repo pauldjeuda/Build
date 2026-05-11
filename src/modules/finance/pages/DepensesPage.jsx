@@ -12,7 +12,7 @@ import Input, { Select } from '../../../components/ui/Input';
 import { formatCurrency, formatDate, statusLabel, statusVariant } from '../../../utils/formatters';
 import { addDepense } from '../store/financeSlice';
 
-const CATEGORIES = ['Matériaux', 'Main d\'œuvre', 'Carburant', 'Location engins', 'Transport', 'Divers'];
+const CATEGORIES = ['Matériaux', "Main d'œuvre", 'Carburant', 'Location engins', 'Transport', 'Divers'];
 
 export default function DepensesPage() {
   const { depenses } = useSelector((s) => s.finance);
@@ -33,10 +33,10 @@ export default function DepensesPage() {
   return (
     <DashboardLayout>
       <div className="space-y-5">
-        <div className="flex items-center justify-between">
-          <div className="bg-white border border-gray-100 rounded-2xl px-5 py-3">
-            <p className="text-xs text-gray-400">Total dépenses</p>
-            <p className="text-xl font-bold text-gray-900">{formatCurrency(total)}</p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="bg-white border border-[#E8E2D9] rounded-2xl px-5 py-3 shadow-card">
+            <p className="font-sans text-xs text-obsidian-400">Total dépenses</p>
+            <p className="font-display text-xl font-bold text-obsidian-900">{formatCurrency(total)}</p>
           </div>
           <Button icon={<Plus size={16} />} onClick={() => setModalOpen(true)}>Nouvelle dépense</Button>
         </div>
@@ -45,20 +45,20 @@ export default function DepensesPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-100">
+                <tr className="border-b border-[#E8E2D9]">
                   {['Date', 'Libellé', 'Catégorie', 'Chantier', 'Montant', 'Statut'].map((h) => (
-                    <th key={h} className="text-left py-3 px-4 font-medium text-gray-400 text-xs uppercase">{h}</th>
+                    <th key={h} className="text-left py-3 px-4 font-display text-xs font-semibold text-obsidian-400 uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-[#F4F1EB]">
                 {depenses.map((d) => (
-                  <tr key={d.id} className="hover:bg-gray-50">
-                    <td className="py-3 px-4 text-gray-500">{formatDate(d.date)}</td>
-                    <td className="py-3 px-4 font-medium text-gray-800">{d.libelle}</td>
+                  <tr key={d.id} className="hover:bg-canvas/60 transition-colors">
+                    <td className="py-3 px-4 font-sans text-sm text-obsidian-500">{formatDate(d.date)}</td>
+                    <td className="py-3 px-4 font-display font-semibold text-obsidian-800">{d.libelle}</td>
                     <td className="py-3 px-4"><Badge variant="info">{d.categorie}</Badge></td>
-                    <td className="py-3 px-4 text-gray-500">{d.chantier}</td>
-                    <td className="py-3 px-4 font-bold text-gray-700">{formatCurrency(d.montant)}</td>
+                    <td className="py-3 px-4 font-sans text-sm text-obsidian-500">{d.chantier}</td>
+                    <td className="py-3 px-4 font-mono text-xs font-semibold text-obsidian-700">{formatCurrency(d.montant)}</td>
                     <td className="py-3 px-4"><Badge variant={statusVariant(d.status)}>{statusLabel(d.status)}</Badge></td>
                   </tr>
                 ))}
@@ -80,7 +80,7 @@ export default function DepensesPage() {
               {chantiers.map((c) => <option key={c.id} value={c.nom}>{c.nom}</option>)}
             </Select>
             <Input label="Montant (FCFA) *" type="number" error={errors.montant?.message} {...register('montant', { required: 'Requis', min: 1 })} />
-            <div className="flex gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Button type="button" variant="secondary" className="flex-1" onClick={() => setModalOpen(false)}>Annuler</Button>
               <Button type="submit" className="flex-1">Enregistrer</Button>
             </div>

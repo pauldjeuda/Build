@@ -2,15 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap');
+/* Syne (display) + DM Sans (body) + JetBrains Mono */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* ─── CSS Custom Properties ─── */
+/* ─── Design Tokens ─── */
 :root {
-  --sidebar-w: 256px;
-  --topbar-h: 64px;
-  --radius: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --sidebar-w:      260px;
+  --topbar-h:       60px;
+  --canvas:         #F4F1EB;
+  --surface:        #FFFFFF;
+  --border:         #E8E2D9;
+  --border-strong:  #D4CEC4;
+  --text-1:         #1A1714;
+  --text-2:         #6B6257;
+  --text-3:         #A09289;
+  --gold:           #C8960C;
+  --gold-light:     #FEF3C7;
+  --obsidian:       #0E0C08;
+  --radius:         10px;
+  --radius-lg:      14px;
+  --radius-xl:      18px;
 }
 
 /* ─── Base reset ─── */
@@ -20,78 +31,106 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
+  font-size: 16px;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #F8FAFC;
-  color: #0F172A;
-  line-height: 1.5;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background-color: var(--canvas);
+  color: var(--text-1);
+  line-height: 1.55;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 a { text-decoration: none; color: inherit; }
-button { font-family: inherit; }
-input, select, textarea { font-family: inherit; }
+button { font-family: 'DM Sans', system-ui, sans-serif; }
+input, select, textarea { font-family: 'DM Sans', system-ui, sans-serif; }
 img { max-width: 100%; }
+code, kbd, pre, samp { font-family: 'JetBrains Mono', monospace; }
 
 /* ─── Scrollbar ─── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
 
 /* ─── Focus ─── */
-:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; border-radius: 6px; }
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
 
 /* ─── Selection ─── */
-::selection { background-color: #BFDBFE; color: #1E40AF; }
+::selection { background-color: #FDE68A; color: var(--obsidian); }
 
-/* ─── Utility layers ─── */
+/* ─── Utility layer ─── */
 @layer utilities {
   .text-balance { text-wrap: balance; }
   .scrollbar-none { scrollbar-width: none; }
   .scrollbar-none::-webkit-scrollbar { display: none; }
 
-  .animate-fade-in { animation: fadeIn 0.2s ease-out both; }
-  .animate-slide-up { animation: slideUp 0.25s ease-out both; }
+  .font-display { font-family: 'Syne', sans-serif; }
+  .font-mono    { font-family: 'JetBrains Mono', monospace; }
+
+  .animate-fade-in  { animation: fadeIn  0.2s ease-out both; }
+  .animate-slide-up { animation: slideUp 0.28s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+  /* Grain overlay for texture */
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px;
+    pointer-events: none;
+    border-radius: inherit;
+  }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
   @keyframes slideUp {
-    from { opacity: 0; transform: translateY(12px); }
+    from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 }
 
-/* ─── Component base ─── */
+/* ─── Component layer ─── */
 @layer components {
   /* Progress bar */
-  .progress-bar {
-    @apply w-full bg-gray-100 rounded-full overflow-hidden;
-    height: 6px;
-  }
-  .progress-fill {
-    @apply h-full rounded-full transition-all duration-500;
-  }
-
-  /* Stat pill */
-  .stat-pill {
-    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium;
-  }
-
-  /* Nav active state */
-  .nav-active {
-    @apply bg-primary-600 text-white font-medium;
-  }
+  .progress-track { @apply w-full rounded-full overflow-hidden; height: 5px; background: var(--border); }
+  .progress-fill  { @apply h-full rounded-full transition-all duration-700; }
 
   /* Sidebar sub-link */
-  .nav-sub-link {
-    @apply block px-3 py-2 rounded-lg text-xs text-slate-400 hover:text-white hover:bg-white/5 transition-colors;
+  .nav-sub {
+    @apply flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-100;
+    color: var(--text-3);
   }
-  .nav-sub-link.active {
-    @apply bg-primary-600 text-white font-medium;
+  .nav-sub:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+  .nav-sub.active {
+    background: var(--gold);
+    color: var(--obsidian);
+    font-weight: 600;
   }
+
+  /* Table */
+  .bp-table th {
+    @apply py-3 px-4 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap;
+    color: var(--text-3);
+    font-family: 'DM Sans', sans-serif;
+    border-bottom: 1px solid var(--border);
+  }
+  .bp-table td { @apply py-3.5 px-4; border-bottom: 1px solid #F0ECE5; }
+  .bp-table tr:last-child td { border-bottom: none; }
+  .bp-table tr:hover td { background: #FAF8F4; }
 }

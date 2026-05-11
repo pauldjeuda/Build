@@ -1,57 +1,57 @@
 import React from 'react';
 
 const colorMap = {
-  blue:   { bg: 'bg-blue-50',    icon: 'text-blue-600',    border: 'border-blue-100'   },
-  green:  { bg: 'bg-emerald-50', icon: 'text-emerald-600', border: 'border-emerald-100' },
-  orange: { bg: 'bg-orange-50',  icon: 'text-orange-500',  border: 'border-orange-100'  },
-  red:    { bg: 'bg-red-50',     icon: 'text-red-500',     border: 'border-red-100'    },
-  purple: { bg: 'bg-violet-50',  icon: 'text-violet-600',  border: 'border-violet-100'  },
-  amber:  { bg: 'bg-amber-50',   icon: 'text-amber-600',   border: 'border-amber-100'   },
-  cyan:   { bg: 'bg-cyan-50',    icon: 'text-cyan-600',    border: 'border-cyan-100'   },
+  blue:   { bar: 'bg-primary-600',  iconBg: 'bg-primary-50',  iconText: 'text-primary-600'  },
+  green:  { bar: 'bg-emerald-500',  iconBg: 'bg-emerald-50',  iconText: 'text-emerald-600'  },
+  orange: { bar: 'bg-orange-500',   iconBg: 'bg-orange-50',   iconText: 'text-orange-600'   },
+  red:    { bar: 'bg-red-500',      iconBg: 'bg-red-50',      iconText: 'text-red-500'      },
+  purple: { bar: 'bg-violet-500',   iconBg: 'bg-violet-50',   iconText: 'text-violet-600'   },
+  amber:  { bar: 'bg-amber-500',    iconBg: 'bg-amber-50',    iconText: 'text-amber-600'    },
+  cyan:   { bar: 'bg-cyan-500',     iconBg: 'bg-cyan-50',     iconText: 'text-cyan-600'     },
+  gold:   { bar: 'bg-gold-500',     iconBg: 'bg-gold-50',     iconText: 'text-gold-600'     },
 };
 
-export default function KpiCard({
-  title,
-  value,
-  subtitle,
-  icon: Icon,
-  color = 'blue',
-  trend,
-  trendValue,
-}) {
-  const c = colorMap[color] ?? colorMap.blue;
+export default function KpiCard({ title, value, subtitle, icon: Icon, color = 'blue', trend, trendValue }) {
+  const c      = colorMap[color] ?? colorMap.blue;
   const isUp   = trend === 'up';
   const isDown = trend === 'down';
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-[0_1px_3px_0_rgba(0,0,0,0.06)] hover:shadow-[0_4px_16px_0_rgba(0,0,0,0.08)] transition-shadow duration-200">
-      <div className="flex items-start justify-between mb-4">
-        <p className="text-xs font-medium text-slate-500 leading-tight pr-2">{title}</p>
-        {Icon && (
-          <div className={`p-2.5 rounded-xl ${c.bg} ${c.border} border shrink-0`}>
-            <Icon size={16} className={c.icon} strokeWidth={2} />
+    <div className="bg-white rounded-2xl border border-[#E8E2D9] shadow-card overflow-hidden hover:shadow-card-hover transition-shadow duration-200 group">
+      {/* Accent bar */}
+      <div className={`h-0.5 w-full ${c.bar}`} />
+
+      <div className="p-5">
+        <div className="flex items-start justify-between mb-4">
+          <p className="text-xs font-medium text-obsidian-400 leading-tight pr-2 font-sans">{title}</p>
+          {Icon && (
+            <div className={`p-2.5 rounded-xl ${c.iconBg} shrink-0 transition-transform duration-200 group-hover:scale-110`}>
+              <Icon size={16} className={c.iconText} strokeWidth={2} />
+            </div>
+          )}
+        </div>
+
+        <p className="font-display text-[1.65rem] font-bold text-obsidian-900 leading-none tracking-tight animate-count-up">
+          {value}
+        </p>
+
+        {(subtitle || trendValue) && (
+          <div className="flex items-center gap-2 mt-2.5">
+            {trendValue && (
+              <span
+                className={[
+                  'inline-flex items-center gap-0.5 text-xs font-semibold px-1.5 py-0.5 rounded-md font-display',
+                  isUp   ? 'bg-emerald-50 text-emerald-700' :
+                  isDown ? 'bg-red-50 text-red-600'         : 'bg-[#F4F1EB] text-obsidian-500',
+                ].join(' ')}
+              >
+                {isUp ? '↑' : isDown ? '↓' : '→'} {trendValue}
+              </span>
+            )}
+            {subtitle && <p className="text-xs text-obsidian-400 font-sans">{subtitle}</p>}
           </div>
         )}
       </div>
-
-      <p className="text-[1.6rem] font-extrabold text-slate-900 leading-none tracking-tight">{value}</p>
-
-      {(subtitle || trendValue) && (
-        <div className="flex items-center gap-2 mt-2.5">
-          {trendValue && (
-            <span
-              className={[
-                'inline-flex items-center gap-0.5 text-xs font-semibold px-1.5 py-0.5 rounded-md',
-                isUp   ? 'bg-emerald-50 text-emerald-600' :
-                isDown ? 'bg-red-50 text-red-500'         : 'bg-slate-100 text-slate-500',
-              ].join(' ')}
-            >
-              {isUp ? '↑' : isDown ? '↓' : '→'} {trendValue}
-            </span>
-          )}
-          {subtitle && <p className="text-xs text-slate-400">{subtitle}</p>}
-        </div>
-      )}
     </div>
   );
 }

@@ -42,13 +42,13 @@ export default function RapportNewPage() {
       <div className="max-w-2xl mx-auto space-y-5">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" icon={<ArrowLeft size={16} />} onClick={() => navigate('/rapports')}>Retour</Button>
-          <h2 className="text-xl font-bold text-gray-900">Rapport Journalier</h2>
+          <h2 className="font-display text-xl font-bold text-obsidian-900">Rapport Journalier</h2>
         </div>
 
         <form className="space-y-5">
           <Card>
             <CardHeader title="Informations générales" />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Select
                 label="Chantier *"
                 error={errors.chantier?.message}
@@ -105,7 +105,7 @@ export default function RapportNewPage() {
             </div>
           </Card>
 
-          <div className="flex gap-3 justify-end">
+          <div className="flex flex-col sm:flex-row gap-3 justify-end">
             <Button type="button" variant="secondary" icon={<Save size={16} />} loading={submitting} onClick={handleSubmit((d) => handleSave(d, 'brouillon'))}>
               Enregistrer brouillon
             </Button>

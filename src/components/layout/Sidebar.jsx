@@ -2,17 +2,14 @@ import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, HardHat, FileText, Package, ShoppingCart,
-  DollarSign, ShieldAlert, Truck, LogOut, ChevronDown,
-  X, Building2, ChevronRight,
+  DollarSign, ShieldAlert, Truck, LogOut, ChevronDown, X,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../modules/auth/store/authSlice';
 
 const NAV = [
   {
-    label: 'Tableaux de bord',
-    icon: LayoutDashboard,
-    accent: 'text-blue-400',
+    label: 'Tableaux de bord', icon: LayoutDashboard, dot: 'bg-primary-500',
     children: [
       { label: 'Direction Générale', to: '/dashboard/dg' },
       { label: 'Direction Finance',  to: '/dashboard/daf' },
@@ -20,77 +17,65 @@ const NAV = [
     ],
   },
   {
-    label: 'Chantiers',
-    icon: HardHat,
-    accent: 'text-orange-400',
+    label: 'Chantiers', icon: HardHat, dot: 'bg-orange-500',
     children: [
       { label: 'Liste des chantiers', to: '/chantiers' },
       { label: 'Créer un chantier',   to: '/chantiers/nouveau' },
     ],
   },
   {
-    label: 'Rapports',
-    icon: FileText,
-    accent: 'text-emerald-400',
+    label: 'Rapports', icon: FileText, dot: 'bg-emerald-500',
     children: [
-      { label: 'Mes rapports',     to: '/rapports' },
-      { label: 'Nouveau rapport',  to: '/rapports/nouveau' },
+      { label: 'Mes rapports',    to: '/rapports' },
+      { label: 'Nouveau rapport', to: '/rapports/nouveau' },
     ],
   },
   {
-    label: 'Stock',
-    icon: Package,
-    accent: 'text-violet-400',
+    label: 'Stock', icon: Package, dot: 'bg-violet-500',
     children: [
-      { label: 'Inventaire',      to: '/stock' },
-      { label: 'Mouvements',      to: '/stock/mouvements' },
-      { label: 'Alertes seuil',   to: '/stock/alertes' },
+      { label: 'Inventaire',    to: '/stock' },
+      { label: 'Mouvements',    to: '/stock/mouvements' },
+      { label: 'Alertes seuil', to: '/stock/alertes' },
     ],
   },
   {
-    label: 'Achats',
-    icon: ShoppingCart,
-    accent: 'text-amber-400',
+    label: 'Achats', icon: ShoppingCart, dot: 'bg-gold-500',
     children: [
-      { label: 'Demandes',       to: '/achats/demandes' },
-      { label: 'Commandes',      to: '/achats/commandes' },
-      { label: 'Fournisseurs',   to: '/achats/fournisseurs' },
+      { label: 'Demandes',     to: '/achats/demandes' },
+      { label: 'Commandes',    to: '/achats/commandes' },
+      { label: 'Fournisseurs', to: '/achats/fournisseurs' },
     ],
   },
   {
-    label: 'Finance',
-    icon: DollarSign,
-    accent: 'text-green-400',
+    label: 'Finance', icon: DollarSign, dot: 'bg-teal-500',
     children: [
-      { label: 'Vue globale',   to: '/finance' },
-      { label: 'Dépenses',      to: '/finance/depenses' },
-      { label: 'Budgets',       to: '/finance/budgets' },
-      { label: 'Factures',      to: '/finance/factures' },
+      { label: 'Vue globale', to: '/finance' },
+      { label: 'Dépenses',    to: '/finance/depenses' },
+      { label: 'Budgets',     to: '/finance/budgets' },
+      { label: 'Factures',    to: '/finance/factures' },
     ],
   },
   {
-    label: 'HSE',
-    icon: ShieldAlert,
-    accent: 'text-red-400',
+    label: 'HSE', icon: ShieldAlert, dot: 'bg-red-500',
     children: [
-      { label: 'Incidents',    to: '/hse/incidents' },
-      { label: 'Inspections',  to: '/hse/inspections' },
+      { label: 'Incidents',   to: '/hse/incidents' },
+      { label: 'Inspections', to: '/hse/inspections' },
     ],
   },
   {
-    label: 'Engins',
-    icon: Truck,
-    accent: 'text-cyan-400',
+    label: 'Engins', icon: Truck, dot: 'bg-cyan-500',
     children: [
-      { label: 'Parc engins',   to: '/engins' },
-      { label: 'Maintenance',   to: '/engins/maintenance' },
+      { label: 'Parc engins', to: '/engins' },
+      { label: 'Maintenance', to: '/engins/maintenance' },
     ],
   },
 ];
 
 function NavGroup({ item }) {
   const location = useLocation();
-  const isActive = item.children.some((c) => location.pathname === c.to || location.pathname.startsWith(c.to + '/'));
+  const isActive = item.children.some(
+    (c) => location.pathname === c.to || location.pathname.startsWith(c.to + '/')
+  );
   const [open, setOpen] = useState(isActive);
   const Icon = item.icon;
 
@@ -99,36 +84,38 @@ function NavGroup({ item }) {
       <button
         onClick={() => setOpen((o) => !o)}
         className={[
-          'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group',
+          'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-display font-medium transition-all duration-150 group',
           isActive
             ? 'bg-white/10 text-white'
-            : 'text-slate-400 hover:bg-white/5 hover:text-slate-200',
+            : 'text-obsidian-400 hover:bg-white/6 hover:text-obsidian-100',
         ].join(' ')}
       >
-        <span className={`shrink-0 ${isActive ? item.accent : 'text-slate-500 group-hover:text-slate-300'} transition-colors`}>
-          <Icon size={17} strokeWidth={isActive ? 2 : 1.75} />
+        <span className="flex items-center gap-2.5 flex-1 min-w-0">
+          <span className={`shrink-0 relative`}>
+            <Icon size={16} strokeWidth={isActive ? 2 : 1.75} className={isActive ? 'text-gold-400' : 'text-obsidian-500 group-hover:text-obsidian-300'} />
+            {isActive && (
+              <span className={`absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full ${item.dot} ring-1 ring-obsidian-900`} />
+            )}
+          </span>
+          <span className="truncate">{item.label}</span>
         </span>
-        <span className="flex-1 text-left truncate">{item.label}</span>
-        <span className={`shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>
-          <ChevronDown size={13} />
-        </span>
+        <ChevronDown
+          size={13}
+          className={`shrink-0 text-obsidian-600 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+        />
       </button>
 
       {open && (
-        <div className="mt-0.5 ml-3 pl-5 border-l border-white/10 space-y-0.5 pb-1">
+        <div className="mt-0.5 ml-4 pl-4 border-l border-white/8 space-y-0.5 py-0.5">
           {item.children.map((child) => (
             <NavLink
               key={child.to}
               to={child.to}
               end
-              className={({ isActive }) =>
-                [
-                  'block px-3 py-2 rounded-lg text-xs transition-all duration-100',
-                  isActive
-                    ? 'bg-primary-600 text-white font-semibold shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-white/5',
-                ].join(' ')
-              }
+              className={({ isActive }) => [
+                'nav-sub',
+                isActive ? 'active' : '',
+              ].join(' ')}
             >
               {child.label}
             </NavLink>
@@ -142,53 +129,57 @@ function NavGroup({ item }) {
 function SidebarContent({ onClose }) {
   const dispatch = useDispatch();
   const user = useSelector((s) => s.auth.user);
+  const initial = user?.name?.[0]?.toUpperCase() ?? 'U';
 
   return (
     <div className="flex flex-col h-full">
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-5 shrink-0">
-        <div className="w-9 h-9 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg shadow-primary-900/40">
-          <Building2 size={18} className="text-white" />
+      <div className="flex items-center gap-3 px-5 pt-6 pb-5 shrink-0">
+        <div className="flex items-center gap-1 shrink-0">
+          <div className="w-7 h-7 bg-gold-500 rounded-lg flex items-center justify-center">
+            <span className="font-display font-black text-obsidian-900 text-xs leading-none">B</span>
+          </div>
+          <div className="w-2 h-7 bg-gold-500/20 rounded-sm ml-0.5" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-white font-extrabold text-base leading-none tracking-wide">BUILDPRO</p>
-          <p className="text-slate-500 text-xs mt-0.5">ERP Gestion BTP</p>
+          <p className="font-display font-black text-white text-base leading-none tracking-widest">BUILDPRO</p>
+          <p className="text-obsidian-500 text-[10px] mt-0.5 tracking-wider uppercase font-sans">ERP · Gestion BTP</p>
         </div>
         {onClose && (
-          <button onClick={onClose} className="md:hidden text-slate-500 hover:text-white p-1">
-            <X size={18} />
+          <button onClick={onClose} className="md:hidden text-obsidian-500 hover:text-white p-1 transition-colors">
+            <X size={16} />
           </button>
         )}
       </div>
 
-      {/* User chip */}
-      <div className="mx-3 mb-3 px-3 py-2.5 bg-white/5 rounded-xl flex items-center gap-3 shrink-0">
-        <div className="w-7 h-7 rounded-lg bg-primary-500 flex items-center justify-center text-xs font-bold text-white shrink-0">
-          {user?.name?.[0] ?? 'U'}
+      {/* User card */}
+      <div className="mx-3 mb-4 px-3 py-2.5 rounded-xl border border-white/8 bg-white/5 flex items-center gap-3 shrink-0">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-sm font-display font-bold text-obsidian-900 shrink-0">
+          {initial}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-semibold text-white truncate">{user?.name ?? 'Utilisateur'}</p>
-          <p className="text-xs text-slate-500 truncate uppercase tracking-wide" style={{ fontSize: '10px' }}>
+          <p className="text-xs font-display font-semibold text-white truncate">{user?.name ?? 'Utilisateur'}</p>
+          <p className="font-sans text-obsidian-500 truncate uppercase tracking-wider" style={{ fontSize: '10px' }}>
             {user?.role ?? 'Admin'}
           </p>
         </div>
+        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" title="En ligne" />
       </div>
 
-      {/* Divider */}
-      <div className="mx-4 mb-3 border-t border-white/5" />
+      <div className="mx-5 mb-3 border-t border-white/6" />
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-2 space-y-0.5 scrollbar-none pb-4">
+      <nav className="flex-1 overflow-y-auto px-2 space-y-0.5 scrollbar-none pb-4" aria-label="Navigation principale">
         {NAV.map((item) => <NavGroup key={item.label} item={item} />)}
       </nav>
 
       {/* Footer */}
-      <div className="px-3 py-3 border-t border-white/5 shrink-0">
+      <div className="px-3 py-3 border-t border-white/6 shrink-0">
         <button
           onClick={() => dispatch(logout())}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all font-medium"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-display font-medium text-obsidian-500 hover:text-red-400 hover:bg-red-500/8 transition-all group"
         >
-          <LogOut size={15} />
+          <LogOut size={14} className="group-hover:translate-x-0.5 transition-transform" />
           Déconnexion
         </button>
       </div>
@@ -200,7 +191,10 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
   return (
     <>
       {/* Desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-slate-900 fixed inset-y-0 left-0 z-30 border-r border-white/5">
+      <aside
+        className="hidden md:flex flex-col w-[260px] bg-obsidian-900 fixed inset-y-0 left-0 z-30 shadow-sidebar"
+        style={{ borderRight: '1px solid rgba(255,255,255,0.06)' }}
+      >
         <SidebarContent />
       </aside>
 
@@ -208,10 +202,13 @@ export default function Sidebar({ mobileOpen, onMobileClose }) {
       {mobileOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
           <div
-            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-obsidian-900/70 backdrop-blur-sm animate-fade-in"
             onClick={onMobileClose}
           />
-          <aside className="absolute inset-y-0 left-0 w-72 bg-slate-900 border-r border-white/5 flex flex-col animate-slide-up">
+          <aside
+            className="absolute inset-y-0 left-0 w-72 bg-obsidian-900 flex flex-col animate-slide-left"
+            style={{ borderRight: '1px solid rgba(255,255,255,0.06)' }}
+          >
             <SidebarContent onClose={onMobileClose} />
           </aside>
         </div>

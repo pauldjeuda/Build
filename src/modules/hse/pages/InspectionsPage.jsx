@@ -15,21 +15,21 @@ export default function InspectionsPage() {
       <div className="space-y-4">
         {inspections.map((insp) => (
           <Card key={insp.id}>
-            <div className="flex items-start justify-between">
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-blue-50 rounded-xl">
-                  <ClipboardCheck size={18} className="text-blue-600" />
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3 flex-1 min-w-0">
+                <div className="p-2 bg-primary-50 rounded-xl shrink-0">
+                  <ClipboardCheck size={18} className="text-primary-600" />
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-gray-800">{insp.chantier}</p>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="font-display font-semibold text-obsidian-800">{insp.chantier}</p>
                     <Badge variant={insp.type === 'Périodique' ? 'info' : 'warning'}>{insp.type}</Badge>
                     <Badge variant={insp.statut === 'conforme' ? 'success' : 'danger'}>
                       {insp.statut === 'conforme' ? 'Conforme' : 'Non conforme'}
                     </Badge>
                   </div>
-                  <p className="text-sm text-gray-500 mt-0.5">Inspecteur : {insp.inspecteur}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{formatDate(insp.date)} · {insp.observations} observation(s)</p>
+                  <p className="font-sans text-sm text-obsidian-500 mt-0.5">Inspecteur : {insp.inspecteur}</p>
+                  <p className="font-sans text-xs text-obsidian-400 mt-0.5">{formatDate(insp.date)} · {insp.observations} observation(s)</p>
                 </div>
               </div>
               <Button variant="ghost" size="sm">Voir rapport</Button>
