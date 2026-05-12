@@ -1,21 +1,22 @@
 import React from 'react';
 
 const variants = {
-  primary:        'bg-gold-500 hover:bg-gold-600 active:bg-gold-700 text-obsidian-900 shadow-btn hover:shadow-btn-hover border border-gold-600/20',
-  gradient:       'bg-gradient-to-r from-gold-400 to-gold-600 hover:from-gold-500 hover:to-gold-700 text-obsidian-900 shadow-btn hover:shadow-btn-hover border border-gold-500/30',
-  secondary:      'bg-obsidian-900 hover:bg-obsidian-800 active:bg-obsidian-950 text-white border border-obsidian-800 shadow-btn',
-  danger:         'bg-red-500 hover:bg-red-600 text-white shadow-sm border border-red-600/20',
-  success:        'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm border border-emerald-700/20',
-  ghost:          'bg-transparent hover:bg-black/5 active:bg-black/8 text-obsidian-500 border border-transparent',
-  outline:        'border border-gold-400 text-gold-600 hover:bg-gold-50 hover:border-gold-500 bg-white',
-  'outline-gray': 'border border-[#E8E2D9] text-obsidian-500 hover:bg-canvas hover:border-obsidian-300 bg-white',
+  primary:        'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-btn hover:shadow-btn-hover border border-blue-700/20',
+  secondary:      'bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-700 border border-slate-200 shadow-xs',
+  danger:         'bg-red-600 hover:bg-red-700 text-white shadow-xs border border-red-700/20',
+  success:        'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs border border-emerald-700/20',
+  ghost:          'bg-transparent hover:bg-slate-100 active:bg-slate-200 text-slate-600 border border-transparent',
+  outline:        'border border-blue-200 text-blue-700 hover:bg-blue-50 active:bg-blue-100 bg-white',
+  'outline-gray': 'border border-slate-200 text-slate-600 hover:bg-slate-50 active:bg-slate-100 bg-white',
+  /* keep legacy "gold" name as blue */
+  gold:           'bg-blue-600 hover:bg-blue-700 text-white shadow-btn border border-blue-700/20',
 };
 
 const sizes = {
-  xs: 'px-2.5 py-1.5 text-xs gap-1.5 rounded-lg',
-  sm: 'px-3.5 py-2   text-xs gap-1.5 rounded-lg',
-  md: 'px-4   py-2.5 text-sm gap-2   rounded-xl',
-  lg: 'px-5   py-3   text-sm gap-2.5 rounded-xl',
+  xs: 'px-2.5 py-1.5 text-xs gap-1.5 rounded-md',
+  sm: 'px-3    py-1.5 text-xs gap-1.5 rounded-md',
+  md: 'px-4    py-2   text-sm gap-2   rounded-lg',
+  lg: 'px-5    py-2.5 text-sm gap-2   rounded-lg',
 };
 
 export default function Button({
@@ -32,9 +33,9 @@ export default function Button({
   return (
     <button
       className={[
-        'inline-flex items-center justify-center font-sans font-semibold tracking-wide',
+        'inline-flex items-center justify-center font-medium',
         'transition-all duration-150 select-none shrink-0 cursor-pointer',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
         'disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none',
         variants[variant] ?? variants.primary,
         sizes[size] ?? sizes.md,
