@@ -31,6 +31,7 @@ const PERMISSIONS = {
   receive_achat:        ['gst'],
   view_achats:          ['dg', 'daf', 'cdt', 'cdc', 'gst'],
   view_commandes:       ['dg', 'daf', 'cdt', 'gst'],
+  create_commande:      ['daf'],
   view_fournisseurs:    ['dg', 'daf', 'cdt', 'gst'],
 
   // Finance §30-42

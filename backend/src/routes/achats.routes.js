@@ -18,7 +18,7 @@ router.patch('/demandes/:id/reject',       authenticate, allow('validate_achat_c
 
 // Commandes
 router.get('/commandes',  authenticate, allow('view_commandes'), catchAsync(listCommandes));
-router.post('/commandes', authenticate, allow('view_commandes'), catchAsync(createCommande));
+router.post('/commandes', authenticate, allow('create_commande'), catchAsync(createCommande));
 
 // Fournisseurs
 router.get('/fournisseurs',  authenticate, allow('view_fournisseurs'), catchAsync(listFournisseurs));

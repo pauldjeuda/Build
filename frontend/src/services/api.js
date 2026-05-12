@@ -17,6 +17,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('buildpro_token');
+      localStorage.removeItem('buildpro_user');
       window.location.href = '/';
     }
     return Promise.reject(error.response?.data || error);

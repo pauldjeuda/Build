@@ -44,16 +44,61 @@ export const updateEnginAsync = createAsyncThunk('engins/update', async ({ id, d
   }
 });
 
+export const fetchMaintenances = createAsyncThunk('engins/fetchMaintenances', async (enginId, { rejectWithValue }) => {
+  try {
+    const res = await enginsService.listMaintenances(enginId);
+    return { enginId, items: res.data ?? res };
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
+export const createMaintenanceAsync = createAsyncThunk('engins/createMaintenance', async ({ enginId, data }, { rejectWithValue }) => {
+  try {
+    const res = await enginsService.createMaintenance(enginId, data);
+    return res.data ?? res;
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
+export const cloturerMaintenanceAsync = createAsyncThunk('engins/cloturerMaintenance', async ({ id, data }, { rejectWithValue }) => {
+  try {
+    const res = await enginsService.clotureMaintenance(id, data);
+    return res.data ?? res;
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
+export const fetchCarnet = createAsyncThunk('engins/fetchCarnet', async (enginId, { rejectWithValue }) => {
+  try {
+    const res = await enginsService.listCarnet(enginId);
+    return { enginId, items: res.data ?? res };
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
+export const addCarnetEntryAsync = createAsyncThunk('engins/addCarnetEntry', async ({ enginId, data }, { rejectWithValue }) => {
+  try {
+    const res = await enginsService.addCarnetEntry(enginId, data);
+    return res.data ?? res;
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
 const enginsSlice = createSlice({
   name: 'engins',
   initialState: {
     list: [],
     maintenances: [],
+    carnet: [],
     loading: false,
     error: null,
   },
   reducers: {
-    addMaintenance(state, action) { state.maintenances.unshift({ ...action.payload, id: Date.now() }); },
     updateEngin(state, action) {
       const idx = state.list.findIndex((e) => e.id === action.payload.id);
       if (idx !== -1) state.list[idx] = action.payload;
@@ -75,9 +120,32 @@ const enginsSlice = createSlice({
         const idx = state.list.findIndex((e) => e.id === payload.id);
         if (idx !== -1) state.list[idx] = payload;
         toast.success('Engin mis à jour');
-      });
+      })
+
+      .addCase(fetchMaintenances.fulfilled, (state, { payload }) => { state.maintenances = payload.items; })
+
+      .addCase(createMaintenanceAsync.fulfilled, (state, { payload }) => {
+        state.maintenances.unshift(payload);
+        toast.success('Maintenance créée');
+      })
+      .addCase(createMaintenanceAsync.rejected, (_, { payload }) => toast.error(payload?.message ?? 'Erreur'))
+
+      .addCase(cloturerMaintenanceAsync.fulfilled, (state, { payload }) => {
+        const idx = state.maintenances.findIndex((m) => m.id === payload.id);
+        if (idx !== -1) state.maintenances[idx] = payload;
+        toast.success('Maintenance clôturée');
+      })
+      .addCase(cloturerMaintenanceAsync.rejected, (_, { payload }) => toast.error(payload?.message ?? 'Erreur'))
+
+      .addCase(fetchCarnet.fulfilled, (state, { payload }) => { state.carnet = payload.items; })
+
+      .addCase(addCarnetEntryAsync.fulfilled, (state, { payload }) => {
+        state.carnet.unshift(payload);
+        toast.success('Entrée carnet ajoutée');
+      })
+      .addCase(addCarnetEntryAsync.rejected, (_, { payload }) => toast.error(payload?.message ?? 'Erreur'));
   },
 });
 
-export const { addMaintenance, updateEngin } = enginsSlice.actions;
+export const { updateEngin } = enginsSlice.actions;
 export default enginsSlice.reducer;

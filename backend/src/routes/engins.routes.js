@@ -13,10 +13,10 @@ router.get('/:id',   authenticate, allow('view_engins'),   catchAsync(showEngin)
 router.post('/',     authenticate, allow('manage_engins'), catchAsync(createEngin));
 router.patch('/:id', authenticate, allow('manage_engins'), catchAsync(updateEngin));
 
-// Maintenance
+// Maintenance — specific paths before /:id wildcard to avoid Express shadowing
+router.patch('/maintenances/:id/cloturer', authenticate, allow('manage_engins'), catchAsync(clotureMaintenance));
 router.get('/:enginId/maintenances',       authenticate, allow('view_engins'),   catchAsync(listMaintenances));
 router.post('/:enginId/maintenances',      authenticate, allow('manage_engins'), catchAsync(createMaintenance));
-router.patch('/maintenances/:id/cloturer', authenticate, allow('manage_engins'), catchAsync(clotureMaintenance));
 
 // Carnet de bord
 router.get('/:enginId/carnet',  authenticate, allow('view_engins'),                         catchAsync(listCarnet));

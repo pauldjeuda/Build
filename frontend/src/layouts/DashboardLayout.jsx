@@ -8,12 +8,13 @@ import Sidebar from '../components/layout/Sidebar';
 import Topbar from '../components/layout/Topbar';
 import { useAuth } from '../hooks/useAuth';
 
+/* Aligne sur §42 — mêmes 4 items prioritaires par rôle que la sidebar */
 const BOTTOM_NAV = {
   dg:  [
     { icon: LayoutDashboard, label: 'Accueil',   to: '/dashboard/dg' },
     { icon: HardHat,         label: 'Chantiers', to: '/chantiers' },
-    { icon: FileText,        label: 'Rapports',  to: '/rapports' },
     { icon: DollarSign,      label: 'Finance',   to: '/finance' },
+    { icon: FileText,        label: 'Rapports',  to: '/rapports' },
   ],
   daf: [
     { icon: LayoutDashboard, label: 'Accueil',   to: '/dashboard/daf' },
@@ -25,19 +26,19 @@ const BOTTOM_NAV = {
     { icon: LayoutDashboard, label: 'Accueil',   to: '/dashboard/cdt' },
     { icon: HardHat,         label: 'Chantiers', to: '/chantiers' },
     { icon: FileText,        label: 'Rapports',  to: '/rapports' },
-    { icon: Package,         label: 'Stock',     to: '/stock' },
+    { icon: DollarSign,      label: 'Finance',   to: '/finance/budgets' },
   ],
   cdc: [
     { icon: LayoutDashboard, label: 'Accueil',   to: '/dashboard/cdc' },
-    { icon: HardHat,         label: 'Chantier',  to: '/chantiers' },
     { icon: FileText,        label: 'Rapports',  to: '/rapports' },
+    { icon: ShoppingCart,    label: 'Achats',    to: '/achats/demandes' },
     { icon: ShieldAlert,     label: 'HSE',       to: '/hse/incidents' },
   ],
   gst: [
     { icon: LayoutDashboard, label: 'Accueil',   to: '/dashboard/gst' },
     { icon: Warehouse,       label: 'Stock',     to: '/stock' },
-    { icon: ShoppingCart,    label: 'Achats',    to: '/achats/demandes' },
     { icon: Package,         label: 'Mouvts',    to: '/stock/mouvements' },
+    { icon: ShoppingCart,    label: 'Achats',    to: '/achats/demandes' },
   ],
   log: [
     { icon: LayoutDashboard, label: 'Accueil',   to: '/dashboard/log' },

@@ -2,169 +2,241 @@ import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, HardHat, FileText, Package, ShoppingCart,
-  DollarSign, ShieldAlert, Truck, LogOut, ChevronDown, X, Warehouse,
-  Building2,
+  DollarSign, ShieldAlert, Truck, LogOut, ChevronDown, X,
+  Warehouse, Building2,
 } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../modules/auth/store/authSlice';
 import { useAuth } from '../../hooks/useAuth';
 import { getRoleLabel } from '../../utils/permissions';
 
+/*
+ * Nav strictement calé sur le §42 Tableau Permissions MVP :
+ *
+ * DG  : tous chantiers ✓ | créer chantier ✓ | finances ✓ | stock lecture | engins lecture | rapports lecture | HSE lecture
+ * DAF : tous chantiers ✓ | finances ✓ | achats ✓ | stock lecture
+ * CDT : créer chantier ✓ | valider rapport ✓ | finances partiel | stock lecture | engins demande
+ * CDC : rapport journalier ✓ | stock demande | engins carnet | achats demandes
+ * GST : stock full ✓ | achats (réception)
+ * LOG : engins full ✓ | chantiers partiel (lecture) | stock lecture
+ * HSE : incidents/inspections ✓ | chantiers lecture
+ */
 function buildNav(role) {
   switch (role) {
     case 'dg':
       return [
-        { label: 'Tableau de bord', icon: LayoutDashboard,
-          children: [{ label: 'Vue Direction', to: '/dashboard/dg' }] },
-        { label: 'Chantiers', icon: HardHat,
+        {
+          label: 'Accueil', icon: LayoutDashboard,
+          children: [{ label: 'Tableau de bord', to: '/dashboard/dg' }],
+        },
+        {
+          label: 'Chantiers', icon: HardHat,
           children: [
             { label: 'Tous les chantiers', to: '/chantiers' },
             { label: 'Nouveau chantier',   to: '/chantiers/nouveau' },
-          ] },
-        { label: 'Rapports', icon: FileText,
-          children: [{ label: 'Rapports journaliers', to: '/rapports' }] },
-        { label: 'Finance', icon: DollarSign,
+          ],
+        },
+        {
+          label: 'Rapports', icon: FileText,
+          children: [{ label: 'Rapports journaliers', to: '/rapports' }],
+        },
+        {
+          label: 'Finance', icon: DollarSign,
           children: [
             { label: 'Vue globale', to: '/finance' },
             { label: 'Dépenses',    to: '/finance/depenses' },
             { label: 'Budgets',     to: '/finance/budgets' },
             { label: 'Factures',    to: '/finance/factures' },
-          ] },
-        { label: 'Stock', icon: Package,
-          children: [
-            { label: 'Inventaire',    to: '/stock' },
-            { label: 'Mouvements',    to: '/stock/mouvements' },
-            { label: 'Alertes seuil', to: '/stock/alertes' },
-          ] },
-        { label: 'Achats', icon: ShoppingCart,
+          ],
+        },
+        {
+          label: 'Achats', icon: ShoppingCart,
           children: [
             { label: 'Demandes',     to: '/achats/demandes' },
             { label: 'Commandes',    to: '/achats/commandes' },
             { label: 'Fournisseurs', to: '/achats/fournisseurs' },
-          ] },
-        { label: 'Engins', icon: Truck,
-          children: [
-            { label: 'Parc engins', to: '/engins' },
-            { label: 'Maintenance', to: '/engins/maintenance' },
-          ] },
-        { label: 'HSE', icon: ShieldAlert,
+          ],
+        },
+        {
+          label: 'Stock', icon: Package,
+          children: [{ label: 'Inventaire', to: '/stock' }],
+        },
+        {
+          label: 'Engins', icon: Truck,
+          children: [{ label: 'Parc engins', to: '/engins' }],
+        },
+        {
+          label: 'HSE', icon: ShieldAlert,
           children: [
             { label: 'Incidents',   to: '/hse/incidents' },
             { label: 'Inspections', to: '/hse/inspections' },
-          ] },
+          ],
+        },
       ];
+
     case 'daf':
       return [
-        { label: 'Tableau de bord', icon: LayoutDashboard,
-          children: [{ label: 'Vue Finance', to: '/dashboard/daf' }] },
-        { label: 'Finance', icon: DollarSign,
+        {
+          label: 'Accueil', icon: LayoutDashboard,
+          children: [{ label: 'Tableau de bord', to: '/dashboard/daf' }],
+        },
+        {
+          label: 'Finance', icon: DollarSign,
           children: [
             { label: 'Vue globale', to: '/finance' },
             { label: 'Dépenses',    to: '/finance/depenses' },
             { label: 'Budgets',     to: '/finance/budgets' },
             { label: 'Factures',    to: '/finance/factures' },
-          ] },
-        { label: 'Achats', icon: ShoppingCart,
+          ],
+        },
+        {
+          label: 'Achats', icon: ShoppingCart,
           children: [
             { label: 'Demandes',     to: '/achats/demandes' },
             { label: 'Commandes',    to: '/achats/commandes' },
             { label: 'Fournisseurs', to: '/achats/fournisseurs' },
-          ] },
-        { label: 'Chantiers', icon: HardHat,
-          children: [{ label: 'Vue chantiers', to: '/chantiers' }] },
+          ],
+        },
+        {
+          label: 'Chantiers', icon: HardHat,
+          children: [{ label: 'Tous les chantiers', to: '/chantiers' }],
+        },
+        {
+          label: 'Stock', icon: Package,
+          children: [{ label: 'Inventaire', to: '/stock' }],
+        },
       ];
+
     case 'cdt':
       return [
-        { label: 'Tableau de bord', icon: LayoutDashboard,
-          children: [{ label: 'Chef de Travaux', to: '/dashboard/cdt' }] },
-        { label: 'Chantiers', icon: HardHat,
+        {
+          label: 'Accueil', icon: LayoutDashboard,
+          children: [{ label: 'Tableau de bord', to: '/dashboard/cdt' }],
+        },
+        {
+          label: 'Chantiers', icon: HardHat,
           children: [
             { label: 'Mes chantiers',  to: '/chantiers' },
-            { label: 'Créer chantier', to: '/chantiers/nouveau' },
-          ] },
-        { label: 'Rapports', icon: FileText,
-          children: [{ label: 'Rapports à valider', to: '/rapports' }] },
-        { label: 'Stock', icon: Package,
-          children: [
-            { label: 'Inventaire',    to: '/stock' },
-            { label: 'Alertes seuil', to: '/stock/alertes' },
-          ] },
-        { label: 'Achats', icon: ShoppingCart,
-          children: [{ label: 'Demandes', to: '/achats/demandes' }] },
-        { label: 'Engins', icon: Truck,
-          children: [
-            { label: 'Parc engins', to: '/engins' },
-            { label: 'Maintenance', to: '/engins/maintenance' },
-          ] },
-        { label: 'Finance', icon: DollarSign,
+            { label: 'Nouveau chantier', to: '/chantiers/nouveau' },
+          ],
+        },
+        {
+          label: 'Rapports', icon: FileText,
+          children: [{ label: 'Rapports à valider', to: '/rapports' }],
+        },
+        {
+          label: 'Finance', icon: DollarSign,
           children: [
             { label: 'Budgets',  to: '/finance/budgets' },
             { label: 'Dépenses', to: '/finance/depenses' },
-          ] },
+          ],
+        },
+        {
+          label: 'Engins', icon: Truck,
+          children: [
+            { label: 'Parc engins', to: '/engins' },
+            { label: 'Maintenance', to: '/engins/maintenance' },
+          ],
+        },
+        {
+          label: 'Stock', icon: Package,
+          children: [{ label: 'Inventaire', to: '/stock' }],
+        },
       ];
+
     case 'cdc':
       return [
-        { label: 'Tableau de bord', icon: LayoutDashboard,
-          children: [{ label: 'Mon chantier', to: '/dashboard/cdc' }] },
-        { label: 'Chantier', icon: HardHat,
-          children: [{ label: 'Fiche chantier', to: '/chantiers' }] },
-        { label: 'Rapports', icon: FileText,
+        {
+          label: 'Accueil', icon: LayoutDashboard,
+          children: [{ label: 'Mon chantier', to: '/dashboard/cdc' }],
+        },
+        {
+          label: 'Rapports', icon: FileText,
           children: [
             { label: 'Mes rapports',    to: '/rapports' },
             { label: 'Nouveau rapport', to: '/rapports/nouveau' },
-          ] },
-        { label: 'Achats', icon: ShoppingCart,
-          children: [{ label: 'Mes demandes', to: '/achats/demandes' }] },
-        { label: 'Stock', icon: Package,
-          children: [{ label: 'Consulter stock', to: '/stock' }] },
-        { label: 'HSE', icon: ShieldAlert,
-          children: [{ label: 'Incidents', to: '/hse/incidents' }] },
-        { label: 'Engins', icon: Truck,
-          children: [{ label: 'Engins présents', to: '/engins' }] },
+          ],
+        },
+        {
+          label: 'Achats', icon: ShoppingCart,
+          children: [{ label: 'Mes demandes', to: '/achats/demandes' }],
+        },
+        {
+          label: 'Engins', icon: Truck,
+          children: [{ label: 'Carnet de bord', to: '/engins' }],
+        },
+        {
+          label: 'HSE', icon: ShieldAlert,
+          children: [{ label: 'Déclarer incident', to: '/hse/incidents' }],
+        },
       ];
+
     case 'gst':
       return [
-        { label: 'Tableau de bord', icon: LayoutDashboard,
-          children: [{ label: 'Dashboard Stock', to: '/dashboard/gst' }] },
-        { label: 'Stock', icon: Warehouse,
+        {
+          label: 'Accueil', icon: LayoutDashboard,
+          children: [{ label: 'Tableau de bord', to: '/dashboard/gst' }],
+        },
+        {
+          label: 'Stock', icon: Warehouse,
           children: [
             { label: 'Inventaire',    to: '/stock' },
             { label: 'Mouvements',    to: '/stock/mouvements' },
             { label: 'Alertes seuil', to: '/stock/alertes' },
-          ] },
-        { label: 'Achats', icon: ShoppingCart,
+          ],
+        },
+        {
+          label: 'Achats', icon: ShoppingCart,
           children: [
             { label: 'Demandes',     to: '/achats/demandes' },
             { label: 'Commandes',    to: '/achats/commandes' },
             { label: 'Fournisseurs', to: '/achats/fournisseurs' },
-          ] },
+          ],
+        },
       ];
+
     case 'log':
       return [
-        { label: 'Tableau de bord', icon: LayoutDashboard,
-          children: [{ label: 'Dashboard Logistique', to: '/dashboard/log' }] },
-        { label: 'Engins', icon: Truck,
+        {
+          label: 'Accueil', icon: LayoutDashboard,
+          children: [{ label: 'Tableau de bord', to: '/dashboard/log' }],
+        },
+        {
+          label: 'Engins', icon: Truck,
           children: [
             { label: 'Parc engins', to: '/engins' },
             { label: 'Maintenance', to: '/engins/maintenance' },
-          ] },
-        { label: 'Chantiers', icon: HardHat,
-          children: [{ label: 'Chantiers', to: '/chantiers' }] },
-        { label: 'Stock', icon: Package,
-          children: [{ label: 'Stock', to: '/stock' }] },
+          ],
+        },
+        {
+          label: 'Chantiers', icon: HardHat,
+          children: [{ label: 'Vue chantiers', to: '/chantiers' }],
+        },
+        {
+          label: 'Stock', icon: Package,
+          children: [{ label: 'Inventaire', to: '/stock' }],
+        },
       ];
+
     case 'hse':
       return [
-        { label: 'Tableau de bord', icon: LayoutDashboard,
-          children: [{ label: 'Dashboard HSE', to: '/dashboard/hse' }] },
-        { label: 'HSE', icon: ShieldAlert,
+        {
+          label: 'Accueil', icon: LayoutDashboard,
+          children: [{ label: 'Tableau de bord', to: '/dashboard/hse' }],
+        },
+        {
+          label: 'HSE', icon: ShieldAlert,
           children: [
             { label: 'Incidents',   to: '/hse/incidents' },
             { label: 'Inspections', to: '/hse/inspections' },
-          ] },
-        { label: 'Chantiers', icon: HardHat,
-          children: [{ label: 'Vue chantiers', to: '/chantiers' }] },
+          ],
+        },
+        {
+          label: 'Chantiers', icon: HardHat,
+          children: [{ label: 'Tous les chantiers', to: '/chantiers' }],
+        },
       ];
+
     default:
       return [];
   }
@@ -192,7 +264,7 @@ function NavGroup({ item }) {
         <Icon
           size={16}
           strokeWidth={isActive ? 2.2 : 1.8}
-          className={isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600 transition-colors'}
+          className={isActive ? 'text-blue-600 shrink-0' : 'text-slate-400 group-hover:text-slate-600 transition-colors shrink-0'}
         />
         <span className="flex-1 text-left truncate">{item.label}</span>
         <ChevronDown
@@ -255,7 +327,6 @@ function SidebarContent({ onClose }) {
 
       {/* User dock */}
       <div className="px-3 py-3 border-t border-slate-100 shrink-0 space-y-1">
-        {/* User info */}
         <div className="flex items-center gap-3 px-3 py-2 rounded-lg">
           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 shrink-0">
             {initial}
@@ -266,12 +337,11 @@ function SidebarContent({ onClose }) {
           </div>
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" title="En ligne" />
         </div>
-        {/* Logout */}
         <button
           onClick={() => dispatch(logout())}
           className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-red-600 hover:bg-red-50 transition-all duration-150 cursor-pointer group"
         >
-          <LogOut size={15} className="group-hover:translate-x-0.5 transition-transform duration-150" />
+          <LogOut size={15} className="shrink-0 group-hover:translate-x-0.5 transition-transform duration-150" />
           Déconnexion
         </button>
       </div>
@@ -282,12 +352,10 @@ function SidebarContent({ onClose }) {
 export default function Sidebar({ mobileOpen, onMobileClose }) {
   return (
     <>
-      {/* Desktop */}
       <aside className="hidden md:flex flex-col w-[240px] bg-white fixed inset-y-0 left-0 z-30 shadow-sidebar">
         <SidebarContent />
       </aside>
 
-      {/* Mobile overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
           <div
