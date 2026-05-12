@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Syne (display) + DM Sans (body) + JetBrains Mono */
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Plus Jakarta Sans (display + body) + JetBrains Mono */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* ─── Design Tokens ─── */
 :root {
@@ -36,22 +36,22 @@ html {
 
 body {
   margin: 0;
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   background-color: var(--canvas);
   color: var(--text-1);
   line-height: 1.55;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
 
 a { text-decoration: none; color: inherit; }
-button { font-family: 'DM Sans', system-ui, sans-serif; }
-input, select, textarea { font-family: 'DM Sans', system-ui, sans-serif; }
+button { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+input, select, textarea { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
 img { max-width: 100%; }
 code, kbd, pre, samp { font-family: 'JetBrains Mono', monospace; }
 
@@ -77,13 +77,29 @@ code, kbd, pre, samp { font-family: 'JetBrains Mono', monospace; }
   .scrollbar-none { scrollbar-width: none; }
   .scrollbar-none::-webkit-scrollbar { display: none; }
 
-  .font-display { font-family: 'Syne', sans-serif; }
+  .font-display { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; letter-spacing: -0.01em; }
   .font-mono    { font-family: 'JetBrains Mono', monospace; }
 
   .animate-fade-in  { animation: fadeIn  0.2s ease-out both; }
   .animate-slide-up { animation: slideUp 0.28s cubic-bezier(0.34,1.56,0.64,1) both; }
 
-  /* Grain overlay for texture */
+  /* Glassmorphism card */
+  .glass-card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.95);
+  }
+
+  /* Gradient shimmer skeleton */
+  .skeleton {
+    background: linear-gradient(90deg, #EDE9E0 25%, #F7F5F0 50%, #EDE9E0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite linear;
+    border-radius: 6px;
+  }
+
+  /* Grain texture overlay */
   .grain::after {
     content: '';
     position: absolute;
@@ -103,6 +119,10 @@ code, kbd, pre, samp { font-family: 'JetBrains Mono', monospace; }
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
 }
 
 /* ─── Component layer ─── */
@@ -111,23 +131,29 @@ code, kbd, pre, samp { font-family: 'JetBrains Mono', monospace; }
   .progress-track { @apply w-full rounded-full overflow-hidden; height: 5px; background: var(--border); }
   .progress-fill  { @apply h-full rounded-full transition-all duration-700; }
 
-  /* Sidebar sub-link */
+  /* Sidebar sub-link — active gets gold left-border accent */
   .nav-sub {
-    @apply flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-100;
-    color: var(--text-3);
+    @apply flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-150 cursor-pointer;
+    color: rgba(255,255,255,0.38);
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
-  .nav-sub:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+  .nav-sub:hover {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.88);
+  }
   .nav-sub.active {
-    background: var(--gold);
-    color: var(--obsidian);
+    background: rgba(200,150,12,0.16);
+    color: #FBCA24;
     font-weight: 600;
+    box-shadow: inset 3px 0 0 #C8960C;
+    padding-left: 14px;
   }
 
-  /* Table */
+  /* Data table */
   .bp-table th {
     @apply py-3 px-4 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap;
     color: var(--text-3);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     border-bottom: 1px solid var(--border);
   }
   .bp-table td { @apply py-3.5 px-4; border-bottom: 1px solid #F0ECE5; }

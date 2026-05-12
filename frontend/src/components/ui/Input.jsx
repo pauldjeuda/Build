@@ -3,7 +3,7 @@ import React, { forwardRef } from 'react';
 const base =
   'w-full bg-white border rounded-xl px-3 py-2.5 text-sm text-obsidian-900 placeholder-obsidian-300 ' +
   'font-sans transition-all duration-150 ' +
-  'focus:outline-none focus:ring-2 focus:ring-gold-400/60 focus:border-gold-400';
+  'focus:outline-none focus:ring-2 focus:ring-gold-400/50 focus:border-gold-400 hover:border-obsidian-300';
 
 const Input = forwardRef(function Input(
   { label, error, helper, icon, suffix, className = '', id, ...props },
@@ -15,7 +15,7 @@ const Input = forwardRef(function Input(
       {label && (
         <label
           htmlFor={inputId}
-          className="text-xs font-display font-semibold text-obsidian-600 uppercase tracking-wider"
+          className="text-xs font-semibold text-obsidian-600 uppercase tracking-wider font-sans"
         >
           {label}
         </label>
@@ -31,16 +31,16 @@ const Input = forwardRef(function Input(
           id={inputId}
           className={[
             base,
-            icon    ? 'pl-10' : '',
-            suffix  ? 'pr-16' : '',
+            icon   ? 'pl-10' : '',
+            suffix ? 'pr-16' : '',
             error
-              ? 'border-red-400 focus:ring-red-400/60 focus:border-red-400'
-              : 'border-[#E8E2D9] hover:border-obsidian-300',
+              ? 'border-red-400 focus:ring-red-400/50 focus:border-red-400 hover:border-red-400'
+              : 'border-[#E8E2D9]',
           ].join(' ')}
           {...props}
         />
         {suffix && (
-          <span className="absolute right-3 text-xs font-display font-medium text-obsidian-400 pointer-events-none">
+          <span className="absolute right-3 text-xs font-semibold text-obsidian-400 pointer-events-none font-sans">
             {suffix}
           </span>
         )}
@@ -63,7 +63,7 @@ export const Select = forwardRef(function Select(
       {label && (
         <label
           htmlFor={selectId}
-          className="text-xs font-display font-semibold text-obsidian-600 uppercase tracking-wider"
+          className="text-xs font-semibold text-obsidian-600 uppercase tracking-wider font-sans"
         >
           {label}
         </label>
@@ -75,8 +75,8 @@ export const Select = forwardRef(function Select(
           base,
           'appearance-none cursor-pointer',
           error
-            ? 'border-red-400 focus:ring-red-400/60'
-            : 'border-[#E8E2D9] hover:border-obsidian-300',
+            ? 'border-red-400 focus:ring-red-400/50'
+            : 'border-[#E8E2D9]',
         ].join(' ')}
         {...props}
       >
@@ -97,7 +97,7 @@ export const Textarea = forwardRef(function Textarea(
       {label && (
         <label
           htmlFor={textareaId}
-          className="text-xs font-display font-semibold text-obsidian-600 uppercase tracking-wider"
+          className="text-xs font-semibold text-obsidian-600 uppercase tracking-wider font-sans"
         >
           {label}
         </label>
@@ -109,8 +109,8 @@ export const Textarea = forwardRef(function Textarea(
           base,
           'resize-none leading-relaxed',
           error
-            ? 'border-red-400 focus:ring-red-400/60'
-            : 'border-[#E8E2D9] hover:border-obsidian-300',
+            ? 'border-red-400 focus:ring-red-400/50'
+            : 'border-[#E8E2D9]',
         ].join(' ')}
         {...props}
       />
